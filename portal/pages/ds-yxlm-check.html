@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>营销联盟审核</title>
+    <link href="../lib/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="../lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../lib/layer/theme/default/layer.css" rel="stylesheet">
+    <link href="../lib/viewer/viewer.min.css" rel="stylesheet">
+    <link href="../lib/jquery-easyui/themes/bootstrap/easyui.min.css" rel="stylesheet">
+</head>
+
+<body>
+<div id="tt" class="easyui-tabs" data-options="fit:true,border:false,tabHeight:36,onSelect:onSelectTab"
+     style="overflow:hidden;">
+    <div title="营销活动">
+		<div class="page">
+			<div id="tb">
+				<a href="#" class="easyui-linkbutton tf tf-yxlm_check1" onclick="onClickCheckPass('fpmx','1')" data-options="iconCls:'fa fa-bars',plain:true">地市审核通过</a>
+				<a href="#" class="easyui-linkbutton tf tf-yxlm_check1" onclick="onClickCheckNoPass('fpmx','1')" data-options="iconCls:'fa fa-bars',plain:true">地市审核不通过</a>
+				<a href="#" class="easyui-linkbutton tf tf-yxlm_check1" onclick="$$.batchSubmit(this)" data-options="iconCls:'fa fa-bars',plain:true,url:'/action/bm/ds-yxlm-fpmx/batch-check1-pass',msg:'审核通过'">地市批量审核通过</a>
+				<a href="#" class="easyui-linkbutton tf tf-yxlm_check1" onclick="$$.batchSubmit(this)" data-options="iconCls:'fa fa-bars',plain:true,url:'/action/bm/ds-yxlm-fpmx/batch-check1-no-pass',msg:'审核不通过'">地市批量审核不通过</a>
+				<a href="#" class="easyui-linkbutton tf tf-yxlm_check2" onclick="onClickCheckPass('fpmx','2')" data-options="iconCls:'fa fa-bars',plain:true">创新审核通过</a>
+				<a href="#" class="easyui-linkbutton tf tf-yxlm_check2" onclick="onClickCheckNoPass('fpmx','2')" data-options="iconCls:'fa fa-bars',plain:true">创新审核不通过</a>
+				<a href="#" class="easyui-linkbutton tf tf-yxlm_check2" onclick="$$.batchSubmit(this)" data-options="iconCls:'fa fa-bars',plain:true,url:'/action/bm/ds-yxlm-fpmx/batch-check2-pass',msg:'审核通过'">创新批量审核通过</a>
+				<a href="#" class="easyui-linkbutton tf tf-yxlm_check2" onclick="$$.batchSubmit(this)" data-options="iconCls:'fa fa-bars',plain:true,url:'/action/bm/ds-yxlm-fpmx/batch-check2-no-pass',msg:'审核不通过'">创新批量审核不通过</a>
+				<a href="#" class="easyui-linkbutton tf tf-yxlm_check3" onclick="onClickCheckPass('fpmx','3')" data-options="iconCls:'fa fa-bars',plain:true">财务审核通过</a>
+				<a href="#" class="easyui-linkbutton tf tf-yxlm_check3" onclick="onClickCheckNoPass('fpmx','3')" data-options="iconCls:'fa fa-bars',plain:true">财务审核不通过</a>
+				<a href="#" class="easyui-linkbutton tf tf-yxlm_check3" onclick="$$.batchSubmit(this)" data-options="iconCls:'fa fa-bars',plain:true,url:'/action/bm/ds-yxlm-fpmx/batch-check3-pass',msg:'审核通过'">财务批量审核通过</a>
+				<a href="#" class="easyui-linkbutton tf tf-yxlm_check3" onclick="$$.batchSubmit(this)" data-options="iconCls:'fa fa-bars',plain:true,url:'/action/bm/ds-yxlm-fpmx/batch-check3-no-pass',msg:'审核不通过'">财务批量审核不通过</a>
+			</div>
+			<table id="dg" class="easyui-datagrid" title="发票明细"
+				   data-options="singleSelect:true,pagination:true,rownumbers:true,idField:'rec_id',toolbar:'#tb'">
+				<thead>
+				<tr>
+					<th data-options="field:'chk',checkbox:true"></th>
+					<th data-options="field:'batch_no'">批次号</th>
+					<th data-options="field:'dq'">地区</th>
+					<th data-options="field:'kpsj'">开票时间</th>
+					<th data-options="field:'lx'">类型</th>
+					<th data-options="field:'kpmc'">开票名称</th>
+					<th data-options="field:'kpxm'">开票项目</th>
+					<th data-options="field:'bz'">备注</th>
+					<th data-options="field:'sfjz'">收费总金额</th>
+					<th data-options="field:'sfksrq'">收费开始日期</th>
+					<th data-options="field:'sfjsrq'">收费结束日期</th>
+					<th data-options="field:'pjh'">票据号</th>
+					<th data-options="field:'jbr'">经办人</th>
+					<th data-options="field:'created_by'">创建人</th>
+					<th data-options="field:'created_time'">创建时间</th>
+					<th data-options="field:'operate_name'">操作类型</th>
+					<th data-options="field:'proc_st_nm'">记录状态</th>
+				</tr>
+				</thead>
+			</table>
+			<br>
+			<div id="tb2">
+				<a href="#" class="easyui-linkbutton tf tf-yxlm_check1" onclick="onClickCheckPass('kpxx','1')" data-options="iconCls:'fa fa-bars',plain:true">地市审核通过</a>
+				<a href="#" class="easyui-linkbutton tf tf-yxlm_check1" onclick="onClickCheckNoPass('kpxx', '1')" data-options="iconCls:'fa fa-bars',plain:true">地市审核不通过</a>
+				<a href="#" class="easyui-linkbutton tf tf-yxlm_check1" onclick="$$.batchSubmit(this)" data-options="iconCls:'fa fa-bars',plain:true,url:'/action/bm/ds-yxlm-kpxx/batch-check1-pass',msg:'审核通过'">地市批量审核通过</a>
+				<a href="#" class="easyui-linkbutton tf tf-yxlm_check1" onclick="$$.batchSubmit(this)" data-options="iconCls:'fa fa-bars',plain:true,url:'/action/bm/ds-yxlm-kpxx/batch-check1-no-pass',msg:'审核不通过'">地市批量审核不通过</a>
+				<a href="#" class="easyui-linkbutton tf tf-yxlm_check2" onclick="onClickCheckPass('kpxx','2')" data-options="iconCls:'fa fa-bars',plain:true">创新审核通过</a>
+				<a href="#" class="easyui-linkbutton tf tf-yxlm_check2" onclick="onClickCheckNoPass('kpxx', '2')" data-options="iconCls:'fa fa-bars',plain:true">创新审核不通过</a>
+				<a href="#" class="easyui-linkbutton tf tf-yxlm_check2" onclick="$$.batchSubmit(this)" data-options="iconCls:'fa fa-bars',plain:true,url:'/action/bm/ds-yxlm-kpxx/batch-check2-pass',msg:'审核通过'">创新批量审核通过</a>
+				<a href="#" class="easyui-linkbutton tf tf-yxlm_check2" onclick="$$.batchSubmit(this)" data-options="iconCls:'fa fa-bars',plain:true,url:'/action/bm/ds-yxlm-kpxx/batch-check2-no-pass',msg:'审核不通过'">创新批量审核不通过</a>
+				<a href="#" class="easyui-linkbutton tf tf-yxlm_check3" onclick="onClickCheckPass('kpxx','3')" data-options="iconCls:'fa fa-bars',plain:true">财务审核通过</a>
+				<a href="#" class="easyui-linkbutton tf tf-yxlm_check3" onclick="onClickCheckNoPass('kpxx', '3')" data-options="iconCls:'fa fa-bars',plain:true">财务审核不通过</a>
+				<a href="#" class="easyui-linkbutton tf tf-yxlm_check3" onclick="$$.batchSubmit(this)" data-options="iconCls:'fa fa-bars',plain:true,url:'/action/bm/ds-yxlm-kpxx/batch-check3-pass',msg:'审核通过'">财务批量审核通过</a>
+				<a href="#" class="easyui-linkbutton tf tf-yxlm_check3" onclick="$$.batchSubmit(this)" data-options="iconCls:'fa fa-bars',plain:true,url:'/action/bm/ds-yxlm-kpxx/batch-check3-no-pass',msg:'审核不通过'">财务批量审核不通过</a>
+			</div>
+			<table id="dg2" class="easyui-datagrid" title="开票信息"
+				   data-options="singleSelect:true,pagination:true,rownumbers:true,idField:'rec_id',toolbar:'#tb2'">
+				<thead>
+				<tr>
+					<th data-options="field:'chk',checkbox:true"></th>
+					<th data-options="field:'batch_no'">批次号</th>
+					<th data-options="field:'fkrmc'">付款人名称</th>
+					<th data-options="field:'nsrsbh'">纳税人识别号</th>
+					<th data-options="field:'khhm'">开户行名</th>
+					<th data-options="field:'zh'">账号</th>
+					<th data-options="field:'dh'">电话</th>
+					<th data-options="field:'dz'">地址</th>
+					<th data-options="field:'created_by'">创建人</th>
+					<th data-options="field:'created_time'">创建时间</th>
+					<th data-options="field:'operate_name'">操作类型</th>
+					<th data-options="field:'proc_st_nm'">记录状态</th>
+				</tr>
+				</thead>
+			</table>
+			<br>
+			<div id="tb3">
+				<a href="#" class="easyui-linkbutton tf tf-yxlm_check1" onclick="onClickCheckPass('dksq','1')" data-options="iconCls:'fa fa-bars',plain:true">地市审核通过</a>
+				<a href="#" class="easyui-linkbutton tf tf-yxlm_check1" onclick="onClickCheckNoPass('dksq','1')" data-options="iconCls:'fa fa-bars',plain:true">地市审核不通过</a>
+				<a href="#" class="easyui-linkbutton tf tf-yxlm_check1" onclick="$$.batchSubmit(this)" data-options="iconCls:'fa fa-bars',plain:true,url:'/action/bm/ds-yxlm-dksq/batch-check1-pass',msg:'审核通过'">地市批量审核通过</a>
+				<a href="#" class="easyui-linkbutton tf tf-yxlm_check1" onclick="$$.batchSubmit(this)" data-options="iconCls:'fa fa-bars',plain:true,url:'/action/bm/ds-yxlm-dksq/batch-check1-no-pass',msg:'审核不通过'">地市批量审核不通过</a>
+				<a href="#" class="easyui-linkbutton tf tf-yxlm_check2" onclick="onClickCheckPass('dksq','2')" data-options="iconCls:'fa fa-bars',plain:true">创新审核通过</a>
+				<a href="#" class="easyui-linkbutton tf tf-yxlm_check2" onclick="onClickCheckNoPass('dksq','2')" data-options="iconCls:'fa fa-bars',plain:true">创新审核不通过</a>
+				<a href="#" class="easyui-linkbutton tf tf-yxlm_check2" onclick="$$.batchSubmit(this)" data-options="iconCls:'fa fa-bars',plain:true,url:'/action/bm/ds-yxlm-dksq/batch-check2-pass',msg:'审核通过'">创新批量审核通过</a>
+				<a href="#" class="easyui-linkbutton tf tf-yxlm_check2" onclick="$$.batchSubmit(this)" data-options="iconCls:'fa fa-bars',plain:true,url:'/action/bm/ds-yxlm-dksq/batch-check2-no-pass',msg:'审核不通过'">创新批量审核不通过</a>
+				<a href="#" class="easyui-linkbutton tf tf-yxlm_check3" onclick="onClickCheckPass('dksq','3')" data-options="iconCls:'fa fa-bars',plain:true">财务审核通过</a>
+				<a href="#" class="easyui-linkbutton tf tf-yxlm_check3" onclick="onClickCheckNoPass('dksq','3')" data-options="iconCls:'fa fa-bars',plain:true">财务审核不通过</a>
+				<a href="#" class="easyui-linkbutton tf tf-yxlm_check3" onclick="$$.batchSubmit(this)" data-options="iconCls:'fa fa-bars',plain:true,url:'/action/bm/ds-yxlm-dksq/batch-check3-pass',msg:'审核通过'">财务批量审核通过</a>
+				<a href="#" class="easyui-linkbutton tf tf-yxlm_check3" onclick="$$.batchSubmit(this)" data-options="iconCls:'fa fa-bars',plain:true,url:'/action/bm/ds-yxlm-dksq/batch-check3-no-pass',msg:'审核不通过'">财务批量审核不通过</a>
+			</div>
+			<table id="dg3" class="easyui-datagrid" title="打款申请"
+				   data-options="singleSelect:true,pagination:true,rownumbers:true,idField:'rec_id',toolbar:'#tb3'">
+				<thead>
+					<tr>
+						<th data-options="field:'chk',checkbox:true"></th>
+						<th data-options="field:'batch_no'">批次号</th>
+						<th data-options="field:'xh'">序号</th>
+						<th data-options="field:'fzjg'">分支机构</th>
+						<th data-options="field:'lx'">类型</th>
+						<th data-options="field:'je'">金额</th>
+						<th data-options="field:'hzfmc'">合作方名称</th>
+						<th data-options="field:'jzkmmc'">记账科目名称</th>
+						<th data-options="field:'zjcbm'">资金池编码</th>
+						<th data-options="field:'bz'">备注</th>
+						<th data-options="field:'created_by'">创建人</th>
+						<th data-options="field:'created_time'">创建时间</th>
+						<th data-options="field:'operate_name'">操作类型</th>
+						<th data-options="field:'proc_st_nm'">记录状态</th>
+					</tr>
+				</thead>
+    		</table>
+    		<br>
+    		<div id="tb4">
+    			<a href="#" class="easyui-linkbutton tf tf-yxlm_check1" onclick="onClickCheckPass('tk','1')" data-options="iconCls:'fa fa-bars',plain:true">地市审核通过</a>
+				<a href="#" class="easyui-linkbutton tf tf-yxlm_check1" onclick="onClickCheckNoPass('tk','1')" data-options="iconCls:'fa fa-bars',plain:true">地市审核不通过</a>
+				<a href="#" class="easyui-linkbutton tf tf-yxlm_check1" onclick="$$.batchSubmit(this)" data-options="iconCls:'fa fa-bars',plain:true,url:'/action/bm/ds-yxlm-tk/batch-check1-pass',msg:'审核通过'">地市批量审核通过</a>
+				<a href="#" class="easyui-linkbutton tf tf-yxlm_check1" onclick="$$.batchSubmit(this)" data-options="iconCls:'fa fa-bars',plain:true,url:'/action/bm/ds-yxlm-tk/batch-check1-no-pass',msg:'审核不通过'">地市批量审核不通过</a>
+				<a href="#" class="easyui-linkbutton tf tf-yxlm_check2" onclick="onClickCheckPass('tk','2')" data-options="iconCls:'fa fa-bars',plain:true">创新审核通过</a>
+				<a href="#" class="easyui-linkbutton tf tf-yxlm_check2" onclick="onClickCheckNoPass('tk','2')" data-options="iconCls:'fa fa-bars',plain:true">创新审核不通过</a>
+				<a href="#" class="easyui-linkbutton tf tf-yxlm_check2" onclick="$$.batchSubmit(this)" data-options="iconCls:'fa fa-bars',plain:true,url:'/action/bm/ds-yxlm-tk/batch-check2-pass',msg:'审核通过'">创新批量审核通过</a>
+				<a href="#" class="easyui-linkbutton tf tf-yxlm_check2" onclick="$$.batchSubmit(this)" data-options="iconCls:'fa fa-bars',plain:true,url:'/action/bm/ds-yxlm-tk/batch-check2-no-pass',msg:'审核不通过'">创新批量审核不通过</a>
+				<a href="#" class="easyui-linkbutton tf tf-yxlm_check3" onclick="onClickCheckPass('tk','3')" data-options="iconCls:'fa fa-bars',plain:true">财务审核通过</a>
+				<a href="#" class="easyui-linkbutton tf tf-yxlm_check3" onclick="onClickCheckNoPass('tk','3')" data-options="iconCls:'fa fa-bars',plain:true">财务审核不通过</a>
+				<a href="#" class="easyui-linkbutton tf tf-yxlm_check3" onclick="$$.batchSubmit(this)" data-options="iconCls:'fa fa-bars',plain:true,url:'/action/bm/ds-yxlm-tk/batch-check3-pass',msg:'审核通过'">财务批量审核通过</a>
+				<a href="#" class="easyui-linkbutton tf tf-yxlm_check3" onclick="$$.batchSubmit(this)" data-options="iconCls:'fa fa-bars',plain:true,url:'/action/bm/ds-yxlm-tk/batch-check3-no-pass',msg:'审核不通过'">财务批量审核不通过</a>
+			</div>
+			<table id="dg4" class="easyui-datagrid" title="退款申请"
+				   data-options="singleSelect:true,pagination:true,rownumbers:true,idField:'rec_id',toolbar:'#tb4'">
+				<thead>
+				<tr>
+					<th data-options="field:'chk',checkbox:true"></th>
+					<th data-options="field:'batch_no'">批次号</th>
+					<th data-options="field:'xh'">序号</th>
+					<th data-options="field:'fzjg'">分支机构</th>
+					<th data-options="field:'lx'">类型</th>
+					<th data-options="field:'tkyy'">退款原因</th>
+					<th data-options="field:'hdmc'">活动名称</th>
+					<th data-options="field:'hdh'">活动号</th>
+					<th data-options="field:'jzkmmc'">记账科目名称</th>
+					<th data-options="field:'zjcbm'">资金池编码</th>
+					<th data-options="field:'lkze'">来款总额</th>
+					<th data-options="field:'syzj'">使用资金</th>
+					<th data-options="field:'ytzj'">应退资金</th>
+					<th data-options="field:'tkzhm'">退款账户名</th>
+					<th data-options="field:'tkzhh'">退款账户号</th>
+					<th data-options="field:'khh'">开户行</th>
+					<th data-options="field:'hh'">行号</th>
+					<th data-options="field:'fgsshq'">分公司申请人</th>
+					<th data-options="field:'bz'">备注</th>
+					<th data-options="field:'created_by'">创建人</th>
+					<th data-options="field:'created_time'">创建时间</th>
+					<th data-options="field:'operate_name'">操作类型</th>
+					<th data-options="field:'proc_st_nm'">记录状态</th>
+				</tr>
+				</thead>
+			</table>
+			<br>
+			<div style="width: 1000px;">
+				<div class="row">
+					<div class="col-sm-2"></div>
+					<div class="col-sm-2"></div>
+					<div class="col-sm-6">
+						<button type="button" class="btn btn-primary tf tf-yxlm_check1" onclick="QuickPass('check1')">一键审批通过</button>
+						<button type="button" class="btn btn-danger tf tf-yxlm_check1" onclick="QuickNoPass('check1')">一键审批不通过</button>
+						<button type="button" class="btn btn-primary tf tf-yxlm_check2" onclick="QuickPass('check2')">一键审批通过</button>
+						<button type="button" class="btn btn-danger tf tf-yxlm_check2" onclick="QuickNoPass('check2')">一键审批不通过</button>
+						<button type="button" class="btn btn-primary tf tf-yxlm_check3" onclick="QuickPass('check3')">一键审批通过</button>
+						<button type="button" class="btn btn-danger tf tf-yxlm_check3" onclick="QuickNoPass('check3')">一键审批不通过</button>
+						<!--button type="button" class="btn btn-default btn-outline" onclick="window.close()">关闭</button-->
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+    <div title="台账" data-options="bodyCls:'tab-body-overflow'">
+        <iframe src="javascript:void(0)" frameborder="0" width="100%" height="100%"
+                style="width:100%; height:100%; border: 0; overflow: hidden;"
+                onload="this.height='100%';"></iframe>
+    </div>
+</div>
+<script src="../lib/jquery/jquery.min.js"></script>
+<script src="../lib/layer/layer.js"></script>
+<script src="../lib/My97DatePicker/WdatePicker.js"></script>
+<script src="../lib/jquery-easyui/jquery.easyui.min.js"></script>
+<script src="../lib/webuploader/webuploader.min.js"></script>
+<script src="../js/base.js?v=201807050940"></script>
+<script>
+    var query = $$.parseQueryString();
+    var displayType = query.displayType;
+    var operateType = query.operateType;
+
+    function reload(target) {
+        $(target).datagrid('reload');
+    }
+
+	function onSelectTab(title, index) {
+        if (index == 0) {
+            return;
+        }
+
+        if (index == 1) {
+            updateIframeSrc(index, $$.serializeUrl('ds-yxlm-tz-detail.html', query));
+        } 
+
+        function updateIframeSrc(index, url) {
+            var panel = $('#tt').tabs('getTab', index);
+            var iframe = panel.find('iframe');
+            if (iframe.attr('src') != url) {
+                iframe.attr('src', url);
+            }
+        }
+    }
+	
+	function onClickCheckPass(table, index) {
+		var map = {
+			'fpmx': ['/action/bm/ds-yxlm-fpmx/check'+index+'-pass', '#dg', '发票明细'],
+			'kpxx': ['/action/bm/ds-yxlm-kpxx/check'+index+'-pass', '#dg2', '开票信息'],
+			'dksq': ['/action/bm/ds-yxlm-dksq/check'+index+'-pass', '#dg3', '打款申请'],
+			'tk': ['/action/bm/ds-yxlm-tk/check'+index+'-pass', '#dg4', '退款']
+		}
+		
+		var url = map[table][0];
+		var dg = map[table][1];
+		var msg = map[table][2];
+		var row = $(dg).datagrid('getSelected');
+		if (row === null) {
+			$$.msg('请选择'+msg+'记录！');
+            return false;
+		}
+		$$.confirm('确认审核通过吗？', function () {
+			$$.request(url, row, function (data) {
+				reload(dg);
+				$$.msg('操作成功');
+			});
+		});
+	}
+	
+	function onClickCheckNoPass(table, index) {
+		var map = {
+			'fpmx': ['/action/bm/ds-yxlm-fpmx/check'+index+'-no-pass', '#dg', '发票明细'],
+			'kpxx': ['/action/bm/ds-yxlm-kpxx/check'+index+'-no-pass', '#dg2', '开票信息'],
+			'dksq': ['/action/bm/ds-yxlm-dksq/check'+index+'-no-pass', '#dg3', '打款申请'],
+			'tk': ['/action/bm/ds-yxlm-tk/check'+index+'-no-pass', '#dg4', '退款']
+		}
+		
+		var url = map[table][0];
+		var dg = map[table][1];
+		var msg = map[table][2];
+		var row = $(dg).datagrid('getSelected');
+		if (row === null) {
+			$$.msg('请选择'+msg+'记录！');
+            return false;
+		}
+		$$.confirm('确认审核不通过吗？', function () {
+			$$.request(url, row, function (data) {
+				reload(dg);
+				$$.msg('操作成功');
+			});
+		});
+	}
+	
+	function QuickPass(table) {
+		var map = {
+			'check1': '/action/bm/ds-yxlm/quick-check1-pass',
+			'check2': '/action/bm/ds-yxlm/quick-check2-pass',
+			'check3': '/action/bm/ds-yxlm/quick-check3-pass'
+		}
+		
+		var url = map[table];
+		$$.confirm('确认快速审核通过吗？', function () {
+			$$.request(url, query, function (data) {
+				$$.msg('操作成功');
+				//window.close();
+				onSelectTab('', 1);
+			});
+		});
+	}
+	
+	function QuickNoPass(table) {
+		var map = {
+			'check1': '/action/bm/ds-yxlm/quick-check1-no-pass',
+			'check2': '/action/bm/ds-yxlm/quick-check2-no-pass',
+			'check3': '/action/bm/ds-yxlm/quick-check3-no-pass'
+		}
+		
+		var url = map[table];
+		$$.confirm('确认快速审核不通过吗？', function () {
+			$$.request(url, query, function (data) {
+				$$.msg('操作成功');
+				//window.close();
+				onSelectTab('', 1);
+			});
+		});
+	}
+	
+	var type = {
+		'yxlm_check1': '1',
+		'yxlm_check2': '2',
+		'yxlm_check3': '3'
+	};
+    $(function () {
+        $$.transform('.page', operateType, {
+            'yxlm_check1': ['create', 'update'],
+			'yxlm_check2': ['create', 'update'],
+			'yxlm_check3': ['create', 'update']
+        });
+		
+		var param = $.extend({}, query, {
+			proc_st: type[operateType]
+		});
+		
+		$('#dg').datagrid({
+            url: $$.wrapUrl('/action/bm/ds-yxlm-fpmx/search'),
+            pageNumber: 1,
+            queryParams: param,
+            onLoadSuccess: function (data) {
+                $(this).datagrid('clearChecked');
+                //解决滚动条引起的panel宽度问题
+                $(this).datagrid('getPanel').panel('resize');
+            }
+        });
+		$('#dg2').datagrid({
+            url: $$.wrapUrl('/action/bm/ds-yxlm-kpxx/search'),
+            pageNumber: 1,
+            queryParams: param,
+            onLoadSuccess: function (data) {
+                $(this).datagrid('clearChecked');
+                //解决滚动条引起的panel宽度问题
+                $(this).datagrid('getPanel').panel('resize');
+            }
+        });
+		$('#dg3').datagrid({
+            url: $$.wrapUrl('/action/bm/ds-yxlm-dksq/search'),
+            pageNumber: 1,
+            queryParams: param,
+            onLoadSuccess: function (data) {
+                $(this).datagrid('clearChecked');
+                //解决滚动条引起的panel宽度问题
+                $(this).datagrid('getPanel').panel('resize');
+            }
+        });
+		$('#dg4').datagrid({
+            url: $$.wrapUrl('/action/bm/ds-yxlm-tk/search'),
+            pageNumber: 1,
+            queryParams: param,
+            onLoadSuccess: function (data) {
+                $(this).datagrid('clearChecked');
+                //解决滚动条引起的panel宽度问题
+                $(this).datagrid('getPanel').panel('resize');
+            }
+        });
+    });
+</script>
+</body>
+
+</html>

@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>营销联盟退款详情</title>
+    <link href="../lib/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="../lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="../lib/webuploader/webuploader.css">
+    <link href="../lib/layer/theme/default/layer.css" rel="stylesheet">
+    <link href="../lib/viewer/viewer.min.css" rel="stylesheet">
+    <link href="../lib/jquery-easyui/themes/bootstrap/easyui.min.css" rel="stylesheet">
+</head>
+
+<body>
+<div class="page">
+    <form id="ff" data-options="onSerialize:$.noop">
+        <table class="table" style="width: 970px;">
+            <!--caption>查询执行记录</caption-->
+            <tr>
+                <td class="text-right col-sm-2">
+                    <label>批次号：</label>
+                </td>
+                <td class="col-sm-4">
+                    <input type="text" name="batch_no">
+                </td>
+                <td class="text-right col-sm-2">
+                    <label>分支机构：</label>
+                </td>
+                <td class="col-sm-4">
+                    <input type="text" name="fzjg">
+                </td>
+            </tr>
+            <tr>
+               	<td class="text-right col-sm-2">
+                    <label>类型：</label>
+                </td>
+                <td class="col-sm-4">
+                    <input type="text" name="lx">
+                </td>
+                <td class="text-right col-sm-2">
+                    <label>退款原因：</label>
+                </td>
+                <td class="col-sm-4">
+                    <input type="text" name="tkyy">
+                </td>
+            </tr>
+            <tr>
+               <td class="text-right col-sm-2">
+                    <label>活动名称：</label>
+                </td>
+                <td class="col-sm-4">
+                    <input type="text" name="hdmc">
+                </td>
+                <td class="text-right col-sm-2">
+                    <label>活动号：</label>
+                </td>
+                <td class="col-sm-4">
+                    <input type="text" name="hdh">
+                </td>
+            </tr>
+            <tr>
+               <td class="text-right col-sm-2">
+                    <label>记账科目名称：</label>
+                </td>
+                <td class="col-sm-4">
+                    <input type="text" name="jzkmmc">
+                </td>
+                <td class="text-right col-sm-2">
+                    <label>资金池编码：</label>
+                </td>
+                <td class="col-sm-4">
+                    <input type="text" name="zjcbm">
+                </td>
+            </tr>
+            <tr>
+               <td class="text-right col-sm-2">
+                    <label>来款总额：</label>
+                </td>
+                <td class="col-sm-4">
+                    <input type="text" name="lkze">
+                </td>
+                <td class="text-right col-sm-2">
+                    <label>使用资金：</label>
+                </td>
+                <td class="col-sm-4">
+                    <input type="text" name="syzj">
+                </td>
+            </tr>
+            <tr>
+               <td class="text-right col-sm-2">
+                    <label>应退资金：</label>
+                </td>
+                <td class="col-sm-4">
+                    <input type="text" name="ytzj">
+                </td>
+                <td class="text-right col-sm-2">
+                    <label>退款账户名：</label>
+                </td>
+                <td class="col-sm-4">
+                    <input type="text" name="tkzhm">
+                </td>
+            </tr>
+            <tr>
+               <td class="text-right col-sm-2">
+                    <label>退款账户号：</label>
+                </td>
+                <td class="col-sm-4">
+                    <input type="text" name="tkzhh">
+                </td>
+                <td class="text-right col-sm-2">
+                    <label>开户行：</label>
+                </td>
+                <td class="col-sm-4">
+                    <input type="text" name="khh">
+                </td>
+            </tr>
+            <tr>
+               <td class="text-right col-sm-2">
+                    <label>行号：</label>
+                </td>
+                <td class="col-sm-4">
+                    <input type="text" name="hh">
+                </td>
+                <td class="text-right col-sm-2">
+                    <label>分公司申请人：</label>
+                </td>
+                <td class="col-sm-4">
+                    <input type="text" name="fgsshq">
+                </td>
+            </tr>
+            <tr>
+               <td class="text-right col-sm-2">
+                    <label>备注：</label>
+                </td>
+                <td class="col-sm-4">
+                    <input type="text" name="bz">
+                </td>
+                <td class="text-right col-sm-2">
+                    <label>创建人：</label>
+                </td>
+                <td class="col-sm-4">
+                    <input type="text" name="created_by">
+                </td>
+            </tr>
+            <tr>
+               <td class="text-right col-sm-2">
+                    <label>创建时间：</label>
+                </td>
+                <td class="col-sm-4">
+                    <input type="text" name="created_time">
+                </td>
+                <td class="text-right col-sm-2">
+                    <label>审核人：</label>
+                </td>
+                <td class="col-sm-4">
+                    <input type="text" name="checked_by">
+                </td>
+            </tr>
+            <tr>
+               <td class="text-right col-sm-2">
+                    <label>审核时间：</label>
+                </td>
+                <td class="col-sm-4">
+                    <input type="text" name="checked_time">
+                </td>
+                <td class="text-right col-sm-2">
+                    <label>审核人：</label>
+                </td>
+                <td class="col-sm-4">
+                    <input type="text" name="checked_by">
+                </td>
+            </tr>
+            <tfoot>
+            <!--tr>
+                <td></td>
+                <td colspan="3">
+                    <button type="button" class="btn btn-primary"
+                            data-options="datagrid:'#dg',url:'/action/bm/lc-exec-his/search'"
+                            onclick="$$.search(this)">查询
+                    </button>
+                    <button type="button" class="btn btn-default btn-outline" onclick="$$.reset(this)">重置</button>
+                </td>
+            </tr-->
+            </tfoot>
+        </table>
+    </form>
+    
+    <br>
+    <div style="width: 1000px;">
+        <div class="row">
+            <div class="col-sm-2"></div>
+            <div class="col-sm-2"></div>
+            <div class="col-sm-6">
+                <button type="button" class="btn btn-default btn-outline" onclick="$$.close()">关闭</button>
+            </div>
+        </div>
+    </div>
+
+</div>
+    
+</div>
+<script src="../lib/jquery/jquery.min.js"></script>
+<script src="../lib/layer/layer.js"></script>
+<script src="../lib/viewer/viewer.min.js"></script>
+<script src="../lib/My97DatePicker/WdatePicker.js"></script>
+<script src="../lib/jquery-easyui/jquery.easyui.min.js"></script>
+<script src="../lib/webuploader/webuploader.min.js"></script>
+<script src="../js/base.js"></script>
+<script src="../js/st.js"></script>
+<script>
+    var query = $$.parseQueryString();
+    var displayType = query.displayType;
+    var operateType = query.operateType;
+
+    $(function () {
+		$$.loadForm('#ff', '/action/bm/ds-yxlm-tk/view', query);
+		
+</script>
+</body>
+
+</html>

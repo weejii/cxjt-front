@@ -1,0 +1,47 @@
+input,
+textarea,
+select {
+    width: 100%;
+    padding: 4px;
+    font-size: 14px;
+    line-height: 1.6;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+
+input, select {
+    height: 32px;
+}
+
+label {
+    padding-top: 5px;
+    line-height: 1.6;
+    font-weight: 400;
+}
+
+input[disabled],
+select[disabled],
+textarea[disabled],
+input[readonly],
+select[readonly],
+textarea[readonly] {
+    background-color: #ebebe4;
+}
+
+.webuploader {
+    display: inline-block;
+}
+
+.webuploader-item-name {
+    display: inline-block;
+    padding: 10px 15px;
+    vertical-align: top;
+}
+
+.webuploader-item-value {
+    display: none;
+}
+
+.page {
+    padding: 10px;
+}

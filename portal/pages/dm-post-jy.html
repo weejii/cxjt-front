@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>POS通终端交易</title>
+    <link href="../lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../lib/jquery-easyui/themes/bootstrap/easyui.min.css" rel="stylesheet">
+    <style type="text/css">
+        body {
+            padding: 5px;
+        }
+
+        label {
+            font-weight: 400;
+        }
+    </style>
+</head>
+
+<body>
+<div>
+    <form>
+        <table class="table" style="width: 970px;">
+            <!-- <caption>查询交易明细</caption> -->
+            <tbody>
+            <tr>
+                <td class="text-right col-sm-2">
+                    <label>交易月份</label>
+                    <span style="color: red;">*</span></td>
+                <td class="col-sm-4">
+                    <input id="settle_date" type="text" class="easyui-validatebox Wdate" name="settle_mon"
+                           data-options="required:true" style="width: 120px;"
+                           onfocus="WdatePicker({onpicked:function(){},dateFmt:'yyyyMM'})">
+                </td>
+                <td class="text-right col-sm-2">
+                    <label>地级市</label></td>
+                <td class="col-sm-4">
+                    <div class="col-sm-12" style="padding:0;">
+                        <input type="text" id="city" name="city" class="easyui-combobox">
+                    </div>
+                </td>
+            <tr>
+                <td class="text-right col-sm-2">
+                    <label>拓展人</label></td>
+                <td class="col-sm-4">
+                    <div class="col-sm-12" style="padding:0;">
+                        <input type="text" id="tzr" name="tzr" class="easyui-combobox">
+                    </div>
+                </td>
+                <td class="text-right col-sm-2">
+                    <label>商户号</label></td>
+                <td class="col-sm-4">
+                    <input type="text" name="shh" class="easyui-validatebox" data-options="">
+                </td>
+            <tr>
+                <td class="text-right col-sm-2">
+                    <label>商户名称</label></td>
+                <td class="col-sm-4">
+                    <input type="text" name="shmc" class="easyui-validatebox" data-options="">
+                </td>
+            </tr>
+            </tbody>
+            <tfoot>
+            <tr>
+                <td></td>
+                <td></td>
+                <td colspan="3">
+                    <button type="button" class="btn btn-primary"
+                            data-options="datagrid:'#dg',url:'/action/bm/dm-post-jy/search'"
+                            onclick="$$.search(this)">查询
+                    </button>
+                    <button type="button" class="btn btn-default btn-outline" onclick="$$.reset(this)">重置</button>
+                    <button type="button" class="btn btn-success"
+                            data-options="datagrid:'#dg',url:'/action/bm/dm-post-jy/export'"
+                            onclick="$$.exportData(this)">导出
+                    </button>
+                </td>
+            </tr>
+            </tfoot>
+        </table>
+    </form>
+    <br>
+    <table id="dg" class="easyui-datagrid" title="终端交易汇总"
+           data-options="singleSelect:true,pagination:true,rownumbers:true">
+        <thead>
+        <tr>
+            <th data-options="field:'settle_mon',width:70">统计月份</th>
+            <th data-options="field:'shh',width:130">商户号</th>
+            <th data-options="field:'zdh',width:80">终端号</th>
+            <th data-options="field:'shmc',width:220">商户名称</th>
+            <th data-options="field:'fzr',width:100">发展人</th>
+            <th data-options="field:'whr',width:100">维护人</th>
+            <th data-options="field:'dyylxmc',width:120">多应用类型名称</th>
+            <th data-options="field:'je',width:90">交易金额</th>
+            <th data-options="field:'bs',width:90">交易笔数</th>
+            <th data-options="field:'sxf',width:90">手续费</th>
+            <th data-options="field:'ppf',width:90">品牌费</th>
+            <th data-options="field:'ylzjf',width:90">银联转接费</th>
+            <th data-options="field:'sdsy',width:90">收单收益</th>
+        </tr>
+        </thead>
+    </table>
+</div>
+<script src="../lib/jquery/jquery.min.js"></script>
+<script src="../lib/layer/layer.js"></script>
+<script src="../lib/My97DatePicker/WdatePicker.js"></script>
+<script src="../lib/jquery-easyui/jquery.easyui.min.js"></script>
+<script src="../js/base.js"></script>
+<!-- <script src="../js/st.js"></script>
+<script src="../js/param.js"></script>
+<script src="../js/district.js"></script> -->
+<script>
+	function onChangeCity() {
+        var value = $(this).val();
+        $$.request('/action/bm/parameter/list', {
+			'tzr': '1',
+            'dq': value
+        }, function (data) {
+            $('#tzr').combobox('loadData',data.tzr);
+        });
+    }
+	
+    $(function () {
+
+        $$.request('/action/bm/city/list', {}, function (data) {
+            $('#city').combobox('loadData', data.city);
+        });
+
+        $$.request('/action/bm/parameter/list', {'tzr': '1'}, function (data) {
+            $('#tzr').combobox('loadData', data.tzr);
+        });
+    });
+</script>
+</body>
+
+</html>

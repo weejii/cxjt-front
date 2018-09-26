@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>T0计提参数</title>
+    <link href="../lib/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="../lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <link href="../lib/layer/theme/default/layer.css" rel="stylesheet">
+    <link href="../lib/jquery-easyui/themes/bootstrap/easyui.min.css" rel="stylesheet">
+
+</head>
+
+<body>
+<div class="page">
+    <form id="ff" data-options="onSerialize:$.noop">
+        <table class="table" style="width: 970px;">
+            <caption>查询T0计提参数</caption>
+            <tbody>
+            <tr>
+                <td class="text-right col-sm-2">
+                    <label>地级市</label></td>
+                <td class="col-sm-4">
+                    <div class="col-sm-12" style="padding:0;">
+                        <input type="text" id="dq" name="dq" class="easyui-combobox">
+                    </div>
+                </td>
+                <td class="text-right col-sm-2">
+                    <label>拓展人</label></td>
+                <td class="col-sm-4">
+                    <div class="col-sm-12" style="padding:0;">
+                        <input type="text" id="tzr" name="tzr" class="easyui-combobox">
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="text-right col-sm-2">
+                    <label>商户号</label></td>
+                <td class="col-sm-4">
+                    <input type="text" name="shh" class="easyui-validatebox" data-options="">
+                </td>
+                <td class="text-right col-sm-2">
+                    <label>商户名称</label></td>
+                <td class="col-sm-4">
+                    <input type="text" name="shmc" class="easyui-validatebox" data-options="">
+                </td>
+            </tr>
+            <tr>
+            	<td class="text-right col-sm-2">
+                    <label>申请月份</label>
+                </td>
+                <td class="col-sm-4">
+                    <input id="sqrq" type="text" class="Wdate" name="sqrq"
+                           style="width: 120px;"
+                           onfocus="WdatePicker({onpicked:function(){},dateFmt:'yyyyMM'})">
+                </td>
+                <!--td class="text-right col-sm-2">
+                    <label>业务类型</label></td>
+                <td class="col-sm-4">
+                    <div class="col-sm-12" style="padding:0;">
+                        <input type="text" id="ywlx" name="ywlx" class="easyui-combobox" data-options="panelHeight:'auto'">
+                    </div>
+                </td-->
+            </tr>
+
+            </tbody>
+
+            <tfoot>
+            <tr>
+                <td></td>
+                <td></td>
+                <td colspan="3">
+                    <button type="button" class="btn btn-primary" onclick="$$.search(this)"
+                            data-options="datagrid:'#dg',url:'/action/bm/dm-t0-csjc/search'">
+                        查询
+                    </button>
+                    <button type="button" class="btn btn-default btn-outline" onclick="$$.reset(this)">重置</button>
+                    <!--button type="button" class="btn btn-success" onclick="$$.exportData(this)"
+                            data-options="datagrid:'#dg',url:'/action/bm/fs-ys-sh/export'">
+                        导出
+                    </button-->
+                    <!--a href="fs-n-backlist.html" class="pull-right" style="font-size: 1.2em;">黑名单管理</a-->
+                </td>
+            </tr>
+            </tfoot>
+        </table>
+    </form>
+    <div id="tb">
+        <a href="#" class="easyui-linkbutton" onclick="onClickEdit(this)" data-options="iconCls:'fa fa-bars',plain:true">存量编辑</a>
+    </div>
+    <table id="dg" class="easyui-datagrid" title="查询结果"
+           data-options="singleSelect:true,pagination:true,rownumbers:true,toolbar:'#tb'">
+        <thead>
+        <tr>
+            <!--th data-options="field:'chk',checkbox:true"></th-->
+            <th data-options="field:'dq',width:70">地区</th>
+            <th data-options="field:'shh',width:130">商户号</th>
+            <th data-options="field:'shmc',width:250">商户名称</th>
+            <th data-options="field:'ywlx',width:100">业务类型</th>
+            <th data-options="field:'tzr',width:80">发展人</th>
+            <th data-options="field:'tzr2',width:80">推广人</th>
+            <th data-options="field:'tzr3',width:80">业务支撑人</th>
+			<th data-options="field:'sqrq',width:100">申请月份</th>
+       		<th data-options="field:'fpbl',width:100">分配比例</th>
+        </tr>
+        </thead>
+    </table>
+</div>
+
+<div id="dd" class="easyui-dialog" title="修改参数" style="width:860px;height:400px;" data-options="resizable:true,modal:true,closed:true">
+    <form id="ff2" data-options="onSerialize:$.noop">
+        <table class="table" style="width: 800px;">
+            <tbody>
+            <tr>
+            	<input type="text" class="hidden" name="shh">
+            	<input type="text" class="hidden" name="zdh">
+            </tr>
+            <!--tr>
+                <td class="text-right col-sm-2">
+                    <label>地级市</label></td>
+                <td class="col-sm-4">
+                    <div class="col-sm-12" style="padding:0;">
+                        <input type="text" id="ddq" name="dq" class="easyui-combobox" data-options="panelHeight:'auto'">
+                    </div>
+                </td>
+                <td class="text-right col-sm-2">
+                    <label>业务类型</label></td>
+                <td class="col-sm-4">
+                    <div class="col-sm-12" style="padding:0;">
+                        <input type="text" id="dywlx" name="ywlx" class="easyui-combobox">
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="text-right col-sm-2">
+                    <label>商户号</label></td>
+                <td class="col-sm-4">
+                    <input type="text" name="shh" class="easyui-validatebox" data-options="">
+                </td>
+                <td class="text-right col-sm-2">
+                    <label>终端号</label></td>
+                <td class="col-sm-4">
+                    <input type="text" name="zdh" class="easyui-validatebox" data-options="">
+                </td>
+            </tr-->
+            <tr>
+            	<td class="text-right col-sm-2">
+                    <label>商户名称</label></td>
+                <td class="col-sm-4">
+                    <input type="text" name="shmc" class="easyui-validatebox" data-options="">
+                </td>
+                <td class="text-right col-sm-2">
+                    <label>拓展人</label></td>
+                <td class="col-sm-4">
+                    <div class="col-sm-12" style="padding:0;">
+                        <input type="text" id="dtzr" name="tzr" class="easyui-combobox">
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="text-right col-sm-2">
+                    <label>维护人</label></td>
+                <td class="col-sm-4">
+                    <div class="col-sm-12" style="padding:0;">
+                        <input type="text" id="dtzr2" name="tzr2" class="easyui-combobox">
+                    </div>
+                </td>
+            	<td class="text-right col-sm-2">
+                    <label>其他支撑</label></td>
+                <td class="col-sm-4">
+                    <div class="col-sm-12" style="padding:0;">
+                        <input type="text" id="dtzr3" name="tzr3" class="easyui-combobox">
+                    </div>
+                </td>
+            </tr>
+            <tr>
+            	<td class="text-right col-sm-2">
+                    <label>分配比例</label></td>
+                <td class="col-sm-4">
+                    <div class="col-sm-12" style="padding:0;">
+                        <input type="text" name="fpbl" class="easyui-validatebox" data-options="">
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+
+            <tfoot>
+            <tr>
+                <td></td>
+                <td></td>
+                <td colspan="3">
+                    <button type="button" class="btn btn-primary" onclick="$$.submit(this)"
+                            data-options="url:'/action/bm/dm-t0-csjc/update',onSuccess:onSubmit">
+                        编辑提交
+                    </button>
+                </td>
+            </tr>
+            </tfoot>
+        </table>
+    </form>
+</div>
+
+<script src="../lib/jquery/jquery.min.js"></script>
+<script src="../lib/layer/layer.js"></script>
+<script src="../lib/My97DatePicker/WdatePicker.js"></script>
+<script src="../lib/jquery-easyui/jquery.easyui.min.js"></script>
+<script src="../js/base.js"></script>
+<script src="../js/st.js"></script>
+<script src="../js/param.js"></script>
+<script src="../js/district.js"></script>
+<script>
+    var query = $$.parseQueryString();
+    var displayType = query.displayType;
+    var operateType = query.operateType;
+
+    function reload() {
+        $('#dg').datagrid('reload');
+    }
+
+	function onChangeCity() {
+        var value = $(this).val();
+        $$.request('/action/bm/parameter/list', {
+			'tzr': '1',
+            'dq': value
+        }, function (data) {
+            $('#tzr').combobox('loadData',data.tzr);
+        });
+    }
+	
+	function onSubmit() {
+		$$.msg('操作成功');
+		$('#dd').dialog('close');
+		reload();
+	}
+	
+	function onClickEdit(){
+		var row = $('#dg').datagrid('getSelected');
+        if (row === null) {
+            $$.msg('请选择记录！');
+            return false;
+        } 
+		$('#dd').dialog('open');
+		$$.loadForm('#ff2', '/action/bm/dm-t0-csjc/view', row);
+	}
+	
+    $(function () {
+        $('form').on('keyup', function (event) {
+            if (event.keyCode == 13) {
+                $(this).find('button.btn-primary').click();
+            }
+        });
+
+        $('#ff').find('button.btn-primary').click();
+
+        $$.request('/action/bm/parameter/list', {'dq': '1'}, function (data) {
+            $('#dq').combobox('loadData', data.dq);
+			$('#ddq').combobox('loadData', data.dq);
+        });
+		
+		$$.request('/action/bm/parameter/list', {'ywlx': '1'}, function (data) {
+            $('#ywlx').combobox('loadData', data.ywlx);
+			$('#dywlx').combobox('loadData', data.ywlx);
+        });
+
+        $$.request('/action/bm/parameter/list', {'tzr': '1'}, function (data) {
+            $('#tzr').combobox('loadData', data.tzr);
+			$('#dtzr').combobox('loadData', data.tzr);
+			$('#dtzr2').combobox('loadData', data.tzr);
+			$('#dtzr3').combobox('loadData', data.tzr);
+        });
+    });
+</script>
+</body>
+
+</html>

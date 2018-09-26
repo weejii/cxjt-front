@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>产品业务数据</title>
+    <link href="../lib/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="../lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <link href="../lib/layer/theme/default/layer.css" rel="stylesheet">
+    <link href="../lib/jquery-easyui/themes/bootstrap/easyui.min.css" rel="stylesheet">
+
+</head>
+
+<body>
+<div class="page">
+    <form id="ff" data-options="onSerialize:$.noop">
+        <table class="table" style="width: 970px;">
+            <caption>查询产品业务报表</caption>
+            <tbody>
+            <tr>
+                <td class="text-right col-sm-2">
+                    <label>交易月份</label>
+                    <span style="color: red;">*</span>
+                </td>
+                <td class="col-sm-4">
+                    <input id="settle_date" type="text" class="easyui-validatebox Wdate" data-options="required:true" name="settle_mon" style="width: 120px;" onfocus="WdatePicker({onpicked:function(){},dateFmt:'yyyyMM'})">
+                </td>
+                <td></td>
+                <!--td class="text-right col-sm-2">
+                    <label>业务类型</label></td>
+                <td class="col-sm-4">
+                    <div class="col-sm-12" style="padding:0;">
+                        <input type="text" id="ywlx" name="ywlx" class="easyui-combobox" data-options="panelHeight:'auto'">
+                    </div>
+                </td-->
+            </tr>
+
+            </tbody>
+
+            <tfoot>
+            <tr>
+                <td></td>
+                <td></td>
+                <td colspan="3">
+                    <button type="button" class="btn btn-primary" onclick="$$.search(this)"
+                            data-options="datagrid:'#dg',url:'/action/bm/cxjc-report-cp-mon/search'">
+                        查询
+                    </button>
+                    <button type="button" class="btn btn-default btn-outline" onclick="$$.reset(this)">重置</button>
+                    <button type="button" class="btn btn-success" onclick="$$.exportData(this)"
+                            data-options="datagrid:'#dg',url:'/action/bm/cxjc-report-cp-mon/export'">
+                        导出
+                    </button>
+                </td>
+            </tr>
+            </tfoot>
+        </table>
+    </form>
+    <!--div id="tb">
+        <a href="#" class="easyui-linkbutton" onclick="onClickView(this)" data-options="iconCls:'fa fa-bars',plain:true">查看明细</a>
+        <a href="#" class="easyui-linkbutton" onclick="onClickCheck(this)" data-options="iconCls:'fa fa-bars',dg:'#dg',plain:true,url:'/action/bm/cxjc-post-export/check'">审核</a>
+        <a href="#" class="easyui-linkbutton" onclick="$$.batchSubmit(this)" data-options="iconCls:'fa fa-bars',plain:true,url:'/action/bm/cxjc-post-export/batch-check',msg:'审核通过'">批量审核</a>
+    </div-->
+    <table id="dg" class="easyui-datagrid" title="查询结果"
+           data-options="singleSelect:true,pagination:true,rownumbers:true,toolbar:'#tb',idField:'rec_id'">
+        <thead>
+        <tr>
+            <!--th data-options="field:'chk',checkbox:true"></th-->
+            <th data-options="field:'dq'">地区</th>
+			<th data-options="field:'zhsf_je'">智慧收付交易金额</th>
+      		<th data-options="field:'zhsf_sxf'">智慧收付手续费</th>
+      		<th data-options="field:'zhsf_sy'">智慧收付收单收益</th>
+       		<th data-options="field:'yued_je'">悦单交易金额</th>
+       		<th data-options="field:'yued_sxf'">悦单手续费</th>
+       		<th data-options="field:'yued_sy'">悦单收单收益</th>
+       		<th data-options="field:'hyjf_je'">行业缴费交易金额</th>
+       		<th data-options="field:'hyjf_sxf'">行业缴费手续费</th>
+       		<th data-options="field:'hyjf_sy'">行业缴费收单收益</th>
+       		<th data-options="field:'s_je'">各产品月总交易金额</th>
+       		<th data-options="field:'s_sxf'">各产品月总手续费</th>
+       		<th data-options="field:'s_sdsy'">各产品月总收单收益</th>
+        </tr>
+        </thead>
+    </table>
+</div>
+<script src="../lib/jquery/jquery.min.js"></script>
+<script src="../lib/layer/layer.js"></script>
+<script src="../lib/My97DatePicker/WdatePicker.js"></script>
+<script src="../lib/jquery-easyui/jquery.easyui.min.js"></script>
+<script src="../js/base.js"></script>
+<script src="../js/st.js"></script>
+<script src="../js/param.js"></script>
+<script src="../js/district.js"></script>
+<script>
+    var query = $$.parseQueryString();
+    var displayType = query.displayType;
+    var operateType = query.operateType;
+
+    function reload() {
+        $('#dg').datagrid('reload');
+    }
+	
+    $(function () {
+        $('form').on('keyup', function (event) {
+            if (event.keyCode == 13) {
+                $(this).find('button.btn-primary').click();
+            }
+        });
+		
+        //$('#ff').find('button.btn-primary').click();
+
+        $$.request('/action/bm/parameter/list', {'dq': '1'}, function (data) {
+            $('#dq').combobox('loadData', data.dq);
+        });
+		
+		$$.request('/action/bm/parameter/list', {'ywlx': '1'}, function (data) {
+            $('#ywlx').combobox('loadData', data.ywlx);
+        });
+    });
+</script>
+</body>
+
+</html>

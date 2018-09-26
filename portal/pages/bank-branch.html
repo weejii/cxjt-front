@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>支行管理</title>
+    <link href="../lib/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="../lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../lib/layer/theme/default/layer.css" rel="stylesheet">
+    <link href="../lib/viewer/viewer.min.css" rel="stylesheet">
+    <link href="../lib/jquery-easyui/themes/bootstrap/easyui.min.css" rel="stylesheet">
+    <style type="text/css">
+    .fi {
+        font-size: 16px;
+        color: #337ab7;
+    }
+    </style>
+</head>
+
+<body>
+    <div class="page">
+        <form id="ff" data-options="serialize:serializeSearch">
+            <table class="table" style="width: 970px;">
+                <!-- <caption>查询机构</caption> -->
+                <tbody>
+                    <tr>
+                        <td class="text-right col-sm-2">
+							<label>开户银行</label>
+						</td>
+						<td class="col-sm-4">
+							<div class="col-sm-12" style="padding:0;">
+								<input type="text" id="account_bank" name="bank_code" class="easyui-combobox" data-options="valueField:'bank_code',textField:'bank_name'">
+							</div>
+						</td>
+                   		<td class="text-right col-sm-2">
+                            <label>支行联行号</label>
+                        </td>
+                        <td class="col-sm-4">
+                            <input type="text" name="subbranch_code">
+                        </td>
+                    </tr>
+                    <tr>
+                   		<td class="text-right col-sm-2">
+                            <label>支行名称</label>
+                        </td>
+                        <td class="col-sm-4">
+                            <input type="text" name="subbranch_name">
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td></td>
+                        <td colspan="3">
+                            <button type="button" id="search-btn" class="btn btn-primary" data-options="datagrid:'#dg',url:'/action/bm/bank-subbranch/search'" onclick="$$.search(this)">查询</button>
+                            <button type="button" class="btn btn-default btn-outline" onclick="$$.reset(this)">重置</button>
+                            <!-- <button type="button" class="btn btn-success" data-options="datagrid:'#dg',url:'/action/bm/inst-info/export'" onclick="$$.exportData(this)">导出</button> -->
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </form>
+        <!--div id="tb">
+            <a href="#" class="easyui-linkbutton" data-options="iconCls:'fi fi-add',plain:true" onclick="$$.open('bank-branch-detail.html?operateType=create', '新增支行')">新增</a>
+            <a href="#" class="easyui-linkbutton" data-options="iconCls:'fi fi-operate',plain:true" onclick="$$.view(this, 'bank-branch-detail.html?operateType=update', '编辑支行')">编辑</a>
+        </div-->
+        <table id="dg" class="easyui-datagrid" title="机构" data-options="singleSelect:true,pagination:true,rownumbers:true,toolbar:'#tb',idField:'rec_id'">
+            <thead>
+                <tr>
+                    <th data-options="field:'bank_code',width:100">银行编号</th>
+                    <th data-options="field:'bank_name',width:200">银行名称</th>
+                    <th data-options="field:'subbranch_code',width:150">支行编号</th>
+                    <th data-options="field:'subbranch_name',width:300">支行名称</th>
+                    <th data-options="field:'settle_bank_cd',width:150">支行接收行行号</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+    <script src="../lib/jquery/jquery.min.js"></script>
+	<script src="../lib/layer/layer.js"></script>
+	<script src="../lib/My97DatePicker/WdatePicker.js"></script>
+	<script src="../lib/jquery-easyui/jquery.easyui.min.js"></script>
+	<script src="../lib/webuploader/webuploader.min.js"></script>
+	<script src="../js/base.js"></script>
+	<script src="../js/st.js"></script>
+    <script>
+    var query = $$.parseQueryString();
+    var displayType = query.displayType;
+    var operateType = query.operateType;
+
+    function serializeSearch(data) {
+
+    }
+
+    $(function() {
+        
+        $('#ff').on('keyup', function(event) {
+            if (event.keyCode == 13) {
+                $(this).find('button.btn-primary').click();
+            }
+        });
+
+		$$.request('/action/bm/parameter/list', {
+            bank: '1'
+        }, function(data) {
+            $('#account_bank').combobox('loadData', data.bank);
+        });
+        // $$.request('/action/bm/inst-info/list', {}, function(data) {
+        //     $('#inst_id').combotree('loadData', $$.generateTreeData(data.rows, {
+        //         id: 'inst_id',
+        //         pid: 'inst_pid',
+        //         text: 'inst_name'
+        //     }));
+        // });
+    });
+    </script>
+</body>
+
+</html>

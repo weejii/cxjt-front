@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>POS通计提明细</title>
+    <link href="../lib/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="../lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="../lib/webuploader/webuploader.css">
+    <link href="../lib/layer/theme/default/layer.css" rel="stylesheet">
+    <link href="../lib/viewer/viewer.min.css" rel="stylesheet">
+    <link href="../lib/jquery-easyui/themes/bootstrap/easyui.min.css" rel="stylesheet">
+</head>
+
+<body>
+<div class="page">
+    <form id="ff" data-options="onSerialize: onSerialForm">
+        <table class="table" style="width: 970px;">
+            <!--caption>查询执行记录</caption-->
+            <tr>
+                <td class="text-right col-sm-2">
+                    <label>商户号：</label>
+                </td>
+                <td class="col-sm-4">
+                    <input type="text" name="shh">
+                </td>
+                <td class="text-right col-sm-2">
+                    <label>终端号：</label>
+                </td>
+                <td class="col-sm-4">
+                    <input type="text" name="zdh">
+                </td>
+            </tr>
+            <tr>
+               	<td class="text-right col-sm-2">
+                    <label>商户名称：</label>
+                </td>
+                <td class="col-sm-4">
+                    <input type="text" name="shmc">
+                </td>
+                <td class="text-right col-sm-2">
+                    <label>申请月份</label></td>
+                <td class="col-sm-4">
+                    <input id="sqrq" type="text" class="easyui-validatebox Wdate" name="sqrq" style="width: 120px;" onfocus="WdatePicker({onpicked:function(){},dateFmt:'yyyyMM'})">
+                </td>
+            </tr>
+            <tr>
+               	<td class="text-right col-sm-2">
+                    <label>业务类型</label></td>
+                <td class="col-sm-4">
+                    <div class="col-sm-12" style="padding:0;">
+                        <input type="text" id="ywlx" name="ywlx" class="easyui-combobox" data-options="panelHeight:'auto'">
+                    </div>
+                </td>
+            </tr>
+            <tfoot>
+            <tr>
+                <td></td>
+                <td align="right">
+                    <button type="button" class="btn btn-primary"
+                            data-options="datagrid:'#dg',url:'/action/bm/cxjc-post-report-detail/search'"
+                            onclick="$$.search(this)">查询
+                    </button>
+                    <button type="button" class="btn btn-success" onclick="$$.exportData(this)"
+                            data-options="datagrid:'#dg',url:'/action/bm/cxjc-post-report-detail/export'">
+                        导出
+                    </button>
+                </td>
+                <td align="left">
+                    <button type="button" class="btn btn-default btn-outline" onclick="$$.reset(this)">重置</button>
+                    <button type="button" class="btn btn-default btn-outline" onclick="$$.close()">关闭</button>
+                </td>
+                <td></td>
+            </tr>
+            </tfoot>
+        </table>
+    </form>
+    
+    <table id="dg" class="easyui-datagrid" title="终端交易汇总" data-options="singleSelect:true,pagination:true,rownumbers:true">
+        <thead>
+        <tr>
+            <th data-options="field:'settle_mon',width:80">统计月份</th>
+            <th data-options="field:'shh',width:150">商户号</th>
+            <th data-options="field:'zdh',width:80">终端</th>
+            <th data-options="field:'shmc',width:200">商户名称</th>
+            <th data-options="field:'dq',width:80">地区</th>
+            <th data-options="field:'tzr',width:80">拓展人</th>
+            <th data-options="field:'sqrq',width:80">申请日期</th>
+            <th data-options="field:'ywlx',width:80">业务类型</th>
+            <th data-options="field:'je',width:100">交易金额</th>
+            <th data-options="field:'bs',width:80">交易笔数</th>
+            <th data-options="field:'sxf',width:100">手续费</th>
+            <th data-options="field:'sdsy',width:100">收单收益</th>
+            <th data-options="field:'bl',width:100">计提比例</th>
+            <th data-options="field:'fp',width:100">分配比例</th>
+            <th data-options="field:'sr',width:100">个人收入</th>
+        </tr>
+        </thead>
+    </table>
+</div>
+    
+</div>
+<script src="../lib/jquery/jquery.min.js"></script>
+<script src="../lib/layer/layer.js"></script>
+<script src="../lib/viewer/viewer.min.js"></script>
+<script src="../lib/My97DatePicker/WdatePicker.js"></script>
+<script src="../lib/jquery-easyui/jquery.easyui.min.js"></script>
+<script src="../lib/webuploader/webuploader.min.js"></script>
+<script src="../js/base.js"></script>
+<script src="../js/st.js"></script>
+<script>
+    var query = $$.parseQueryString();
+    var displayType = query.displayType;
+    var operateType = query.operateType;
+
+	function onSerialForm(data) {
+		$.extend(data, query);
+	}
+	
+    function reload() {
+        $('#dg').datagrid('reload');
+    }
+	
+	var action = {'edit': [
+		'edit','update'
+	]};
+	
+    $(function () {
+		$$.transform('#ff', displayType, action);
+		//$$.loadForm('#ff', '/action/bm/cxjt-post-report-detail/search', query);
+		$$.request('/action/bm/parameter/list', {'ywlx': '1'}, function (data) {
+            $('#ywlx').combobox('loadData', data.ywlx);
+        });
+		$('#ff').find('button.btn-primary').click();
+    });
+</script>
+</body>
+
+</html>

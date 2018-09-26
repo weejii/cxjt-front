@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>资金划付</title>
+    <link href="../lib/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="../lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../lib/layer/theme/default/layer.css" rel="stylesheet">
+    <link href="../lib/viewer/viewer.min.css" rel="stylesheet">
+    <link href="../lib/jquery-easyui/themes/bootstrap/easyui.min.css" rel="stylesheet">
+    <style type="text/css">
+    .fi {
+        font-size: 16px;
+        color: #337ab7;
+    }
+    </style>
+</head>
+
+<body>
+    <div class="page">
+        <form id="ff" data-options="serialize:serializeSearch">
+            <table class="table" style="width: 970px;">
+                <!-- <caption>查询机构</caption> -->
+                <tbody>
+                    <tr>
+                        <td class="text-right col-sm-2">
+							<label>划付日期：</label>
+							<span style="color: red;">*</span>
+						</td>
+						<td class="col-sm-4">
+							<input id="hfrq1" type="text" class="easyui-validatebox Wdate" name="hfrq1" data-options="required:true" style="width: 120px;"
+                           onfocus="WdatePicker({onpicked:function(){$dp.$('#frq2').focus();},maxDate:'#F{$dp.$D(\'hfrq2\')}'})">
+                    <input id="hfrq2" type="text" class="Wdate" name="hfrq2" style="width: 120px;"
+                           onfocus="WdatePicker({minDate:'#F{$dp.$D(\'hfrq2\')}'})">
+						</td>
+                   		<td class="text-right col-sm-2">
+                            <label>商户号</label>
+                        </td>
+                        <td class="col-sm-4">
+                            <input type="text" name="shh">
+                        </td>
+                    </tr>
+                    <tr>
+                   		<td class="text-right col-sm-2">
+                            <label>商户名称</label>
+                        </td>
+                        <td class="col-sm-4">
+                            <input type="text" name="shmc">
+                        </td>
+                        <td class="text-right col-sm-2">
+                            <label>账号</label>
+                        </td>
+                        <td class="col-sm-4">
+                            <input type="text" name="zh">
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td></td>
+                        <td colspan="3">
+                            <button type="button" id="search-btn" class="btn btn-primary" data-options="datagrid:'#dg',url:'/action/bm/zijinhuafu/search'" onclick="$$.search(this)">查询</button>
+                            <button type="button" class="btn btn-default btn-outline" onclick="$$.reset(this)">重置</button>
+                            <!-- <button type="button" class="btn btn-success" data-options="datagrid:'#dg',url:'/action/bm/inst-info/export'" onclick="$$.exportData(this)">导出</button> -->
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </form>
+        <!--div id="tb">
+            <a href="#" class="easyui-linkbutton" data-options="iconCls:'fi fi-add',plain:true" onclick="$$.open('bank-branch-detail.html?operateType=create', '新增支行')">新增</a>
+            <a href="#" class="easyui-linkbutton" data-options="iconCls:'fi fi-operate',plain:true" onclick="$$.view(this, 'bank-branch-detail.html?operateType=update', '编辑支行')">编辑</a>
+        </div-->
+        <table id="dg" class="easyui-datagrid" title="资金划付" data-options="singleSelect:true,pagination:true,rownumbers:true,toolbar:'#tb'">
+            <thead>
+                <tr>
+                    <th data-options="field:'fzjg',width:100">分支机构</th>
+                    <th data-options="field:'shh',width:120">商户号</th>
+                    <th data-options="field:'shmc',width:150">商户名称</th>
+                    <th data-options="field:'hfrq',width:80">划付日期</th>
+                    <th data-options="field:'hfqd',width:80">划付渠道</th>
+                    <th data-options="field:'zh',width:120">账号</th>
+                    <th data-options="field:'zhmc',width:150">账户名称</th>
+                    <th data-options="field:'hh',width:120">行号</th>
+                    <th data-options="field:'hmc',width:120">行名称</th>
+                    <th data-options="field:'hfje',width:80">划付金额</th>
+                    <th data-options="field:'sxf',width:80">手续费</th>
+                    <th data-options="field:'hflx',width:80">划付类型</th>
+                    <th data-options="field:'zt',width:80">状态</th>
+                    <th data-options="field:'hffy',width:150">划付附言</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+    <script src="../lib/jquery/jquery.min.js"></script>
+	<script src="../lib/layer/layer.js"></script>
+	<script src="../lib/My97DatePicker/WdatePicker.js"></script>
+	<script src="../lib/jquery-easyui/jquery.easyui.min.js"></script>
+	<script src="../lib/webuploader/webuploader.min.js"></script>
+	<script src="../js/base.js"></script>
+	<script src="../js/st.js"></script>
+    <script>
+    var query = $$.parseQueryString();
+    var displayType = query.displayType;
+    var operateType = query.operateType;
+
+    function serializeSearch(data) {
+
+    }
+
+    $(function() {
+        
+        $('#ff').on('keyup', function(event) {
+            if (event.keyCode == 13) {
+                $(this).find('button.btn-primary').click();
+            }
+        });
+    });
+    </script>
+</body>
+
+</html>

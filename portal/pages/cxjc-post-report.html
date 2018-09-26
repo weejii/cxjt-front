@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>POS通创新计提</title>
+    <link href="../lib/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="../lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <link href="../lib/layer/theme/default/layer.css" rel="stylesheet">
+    <link href="../lib/jquery-easyui/themes/bootstrap/easyui.min.css" rel="stylesheet">
+
+</head>
+
+<body>
+<div class="page">
+    <form id="ff" data-options="onSerialize:$.noop">
+        <table class="table" style="width: 970px;">
+            <caption>查询POS通参数</caption>
+            <tbody>
+            <tr>
+                <td class="text-right col-sm-2">
+                    <label>交易月份</label></td>
+                <td class="col-sm-4">
+                    <input id="settle_date" type="text" class="easyui-validatebox Wdate" name="settle_mon" style="width: 120px;" onfocus="WdatePicker({onpicked:function(){},dateFmt:'yyyyMM'})">
+                </td>
+                <td class="text-right col-sm-2">
+                    <label>地级市</label></td>
+                <td class="col-sm-4">
+                    <div class="col-sm-12" style="padding:0;">
+                        <input type="text" id="dq" name="dq" class="easyui-combobox">
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="text-right col-sm-2">
+                    <label>拓展人</label></td>
+                <td class="col-sm-4">
+                    <div class="col-sm-12" style="padding:0;">
+                        <input type="text" id="tzr" name="tzr" class="easyui-combobox">
+                    </div>
+                </td>
+                <td class="text-right col-sm-2">
+                    <label>审核状态</label></td>
+                <td class="col-sm-4">
+                    <div class="col-sm-12" style="padding:0;">
+                        <input type="text" id="proc_st" name="proc_st" class="easyui-combobox" data-options="panelHeight:'auto'">
+                    </div>
+                </td>
+            </tr>
+
+            </tbody>
+
+            <tfoot>
+            <tr>
+                <td></td>
+                <td></td>
+                <td colspan="3">
+                    <button type="button" class="btn btn-primary" onclick="$$.search(this)"
+                            data-options="datagrid:'#dg',url:'/action/bm/cxjc-post-report/search'">
+                        查询
+                    </button>
+                    <button type="button" class="btn btn-default btn-outline" onclick="$$.reset(this)">重置</button>
+                    <button type="button" class="btn btn-success" onclick="$$.exportData(this)"
+                            data-options="datagrid:'#dg',url:'/action/bm/cxjc-post-report/export'">
+                        导出
+                    </button>
+                    <!--a href="fs-n-backlist.html" class="pull-right" style="font-size: 1.2em;">黑名单管理</a-->
+                </td>
+            </tr>
+            </tfoot>
+        </table>
+    </form>
+    <div id="tb">
+        <a href="#" class="easyui-linkbutton" onclick="onClickView(this)" data-options="iconCls:'fa fa-bars',plain:true">查看明细</a>
+        <a href="#" class="easyui-linkbutton" onclick="onClickCheck(this)" data-options="iconCls:'fa fa-bars',dg:'#dg',plain:true,url:'/action/bm/cxjc-post-export/check'">审核</a>
+        <a href="#" class="easyui-linkbutton" onclick="$$.batchSubmit(this)" data-options="iconCls:'fa fa-bars',plain:true,url:'/action/bm/cxjc-post-export/batch-check',msg:'审核通过'">批量审核</a>
+    </div>
+    <table id="dg" class="easyui-datagrid" title="查询结果"
+           data-options="singleSelect:true,pagination:true,rownumbers:true,toolbar:'#tb',idField:'rec_id'">
+        <thead>
+        <tr>
+            <th data-options="field:'chk',checkbox:true"></th>
+            <th data-options="field:'settle_mon',width:80">统计月份</th>
+            <th data-options="field:'dq',width:80">地区</th>
+            <th data-options="field:'tzr',width:100">客户经理</th>
+			<th data-options="field:'je',width:120">交易金额</th>
+       		<th data-options="field:'bs',width:100">交易笔数</th>
+       		<th data-options="field:'sxf',width:120">手续费</th>
+       		<th data-options="field:'sy',width:120">收益</th>
+       		<th data-options="field:'syjt',width:100">创新计提</th>
+       		<th data-options="field:'proc_st_nm',width:100">审核状态</th>
+       		<th data-options="field:'check_by',width:100">审核人</th>
+       		<th data-options="field:'check_time',width:140">审核时间</th>
+        </tr>
+        </thead>
+    </table>
+</div>
+<script src="../lib/jquery/jquery.min.js"></script>
+<script src="../lib/layer/layer.js"></script>
+<script src="../lib/My97DatePicker/WdatePicker.js"></script>
+<script src="../lib/jquery-easyui/jquery.easyui.min.js"></script>
+<script src="../js/base.js"></script>
+<script src="../js/st.js"></script>
+<script src="../js/param.js"></script>
+<script src="../js/district.js"></script>
+<script>
+    var query = $$.parseQueryString();
+    var displayType = query.displayType;
+    var operateType = query.operateType;
+
+    function reload() {
+        $('#dg').datagrid('reload');
+    }
+	
+	function onClickView(target) {
+		var row = $('#dg').datagrid('getSelected');
+		if (row === null) {
+            $$.msg('请选择记录！');
+            return false;
+        } 
+		var option = {
+			settle_mon: row.settle_mon,
+			tzr: row.tzr
+		};
+		var url = 'cxjc-post-report-detail.html?'+$.param(option);
+		var iframe = layer.open({
+            type: 2,
+            content: url,
+            area: ['100%', '100%'],
+            title: null
+        });
+        layer.full(iframe);
+	}
+	
+	function onClickCheck(target) {
+		var row = $('#dg').datagrid('getSelected');
+        if (row === null) {
+            $$.msg('请选择记录！');
+            return false;
+        } 
+		$$.confirm('确认要审核通过？', function () {
+			$$.request('/action/bm/cxjc-post-export/check', row, function () {
+				reload();
+				$$.msg('操作成功');
+			});
+		});
+	}
+	
+	function onChangeCity() {
+        var value = $(this).val();
+        $$.request('/action/bm/parameter/list', {
+			'tzr': '1',
+            'dq': value
+        }, function (data) {
+            $('#tzr').combobox('loadData',data.tzr);
+        });
+    }
+	
+	var toggleOptions = {
+        options: {
+			view: {
+				url: 'cxjc-post-report-detail.html'
+			}
+        },
+        params: {
+			view: {
+				
+			}
+		}
+    };
+	
+    $(function () {
+        $('form').on('keyup', function (event) {
+            if (event.keyCode == 13) {
+                $(this).find('button.btn-primary').click();
+            }
+        });
+
+		$('a.easyui-linkbutton[data-toggle]').on('click', function (event) {
+            event.preventDefault();
+            $$.clickToolbar(this, toggleOptions);
+        });
+		
+        $('#ff').find('button.btn-primary').click();
+
+        $$.request('/action/bm/parameter/list', {'dq': '1'}, function (data) {
+            $('#dq').combobox('loadData', data.dq);
+        });
+		
+        $$.request('/action/bm/parameter/list', {'tzr': '1'}, function (data) {
+            $('#tzr').combobox('loadData', data.tzr);
+        });
+		
+		$$.request('/action/bm/parameter/list', {'proc_st': '1', 'type_id': '1'}, function (data) {
+            $('#proc_st').combobox('loadData', data.proc_st);
+        });
+    });
+</script>
+</body>
+
+</html>

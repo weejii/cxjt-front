@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>营销联盟退款</title>
+    <link href="../lib/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="../lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <link href="../lib/layer/theme/default/layer.css" rel="stylesheet">
+    <link href="../lib/jquery-easyui/themes/bootstrap/easyui.min.css" rel="stylesheet">
+
+</head>
+
+<body>
+<div class="page">
+    <form id="ff" data-options="onSerialize:$.noop">
+        <table class="table" style="width: 970px;">
+            <caption>查询营销联盟退款</caption>
+            <tbody>
+            <tr>
+                <td class="text-right col-sm-2">
+                    <label>地级市</label></td>
+                <td class="col-sm-4">
+                    <div class="col-sm-12" style="padding:0;">
+                        <input type="text" id="dq" name="dq" class="easyui-combobox">
+                    </div>
+                </td>
+                <td class="text-right col-sm-2">
+                    <label>拓展人</label></td>
+                <td class="col-sm-4">
+                    <div class="col-sm-12" style="padding:0;">
+                        <input type="text" id="tzr" name="tzr" class="easyui-combobox" data-options="valueField: 'tzr',textField: 'tzr'">
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+            	<td class="text-right col-sm-2">
+                    <label>业务类型</label></td>
+                <td class="col-sm-4">
+                    <div class="col-sm-12" style="padding:0;">
+                        <input type="text" id="ywlx" name="ywlx" class="easyui-combobox" data-options="panelHeight:'auto'">
+                    </div>
+                </td>
+            </tr>
+
+            </tbody>
+
+            <tfoot>
+            <tr>
+                <td></td>
+                <td></td>
+                <td colspan="3">
+                    <button type="button" class="btn btn-primary" onclick="$$.search(this)"
+                            data-options="datagrid:'#dg',url:'/action/bm/ds-yxlm-tk/search'">
+                        查询
+                    </button>
+                    <button type="button" class="btn btn-default btn-outline" onclick="$$.reset(this)">重置</button>
+                </td>
+            </tr>
+            </tfoot>
+        </table>
+    </form>
+    <div id="tb">
+        <a href="#" class="easyui-linkbutton" data-toggle="view" data-options="iconCls:'fa fa-bars',plain:true">查看详情</a>
+    </div>
+    <table id="dg" class="easyui-datagrid" title="查询结果"
+           data-options="singleSelect:true,pagination:true,rownumbers:true,idField:'rec_id',toolbar:'#tb'">
+        <thead>
+        <tr>
+            <th data-options="field:'chk',checkbox:true"></th>
+            <th data-options="field:'batch_no',width:80">批次号</th>
+            <th data-options="field:'xh',width:60">序号</th>
+            <th data-options="field:'fzjg',width:130">分支机构</th>
+            <th data-options="field:'lx',width:80">类型</th>
+            <th data-options="field:'tkyy',width:250">退款原因</th>
+            <th data-options="field:'hdmc',width:80">活动名称</th>
+            <th data-options="field:'hdh',width:60">活动号</th>
+            <th data-options="field:'jzkmmc',width:100">记账科目名称</th>
+            <th data-options="field:'zjcbm',width:120">资金池编码</th>
+            <th data-options="field:'lkze',width:90">来款总额</th>
+            <th data-options="field:'syzj',width:120">使用资金</th>
+            <th data-options="field:'ytzj',width:100">应退资金</th>
+            <th data-options="field:'tkzhm',width:100">退款账户名</th>
+            <th data-options="field:'tkzhh',width:100">退款账户号</th>
+            <th data-options="field:'khh',width:100">开户行</th>
+            <th data-options="field:'hh',width:100">行号</th>
+            <th data-options="field:'fgsshq',width:100">分公司申请人</th>
+            <th data-options="field:'bz',width:100">备注</th>
+            <th data-options="field:'created_by',width:100">创建人</th>
+            <th data-options="field:'created_time',width:100">创建时间</th>
+        </tr>
+        </thead>
+    </table>
+</div>
+<script src="../lib/jquery/jquery.min.js"></script>
+<script src="../lib/layer/layer.js"></script>
+<script src="../lib/My97DatePicker/WdatePicker.js"></script>
+<script src="../lib/jquery-easyui/jquery.easyui.min.js"></script>
+<script src="../js/base.js"></script>
+<script src="../js/st.js"></script>
+<script src="../js/param.js"></script>
+<script src="../js/district.js"></script>
+<script>
+    var query = $$.parseQueryString();
+    var displayType = query.displayType;
+    var operateType = query.operateType;
+
+    function reload() {
+        $('#dg').datagrid('reload');
+    }
+
+	function onChangeCity() {
+        var value = $(this).val();
+        $$.request('/action/bm/tzr/list', {
+            dq: value
+        }, function (data) {
+            $('#tzr').combobox('loadData',data.tzr);
+        });
+    }
+	
+	var toggleOptions = {
+        options: {
+			view: {
+				url: 'ds-yxlm-fpmx-detail.html'
+			}
+        },
+        params: {
+			view: {
+				
+			}
+		}
+    };
+	
+    $(function () {
+        $('form').on('keyup', function (event) {
+            if (event.keyCode == 13) {
+                $(this).find('button.btn-primary').click();
+            }
+        });
+		
+		$('#tb a.easyui-linkbutton[data-toggle]').on('click', function (event) {
+            event.preventDefault();
+            $$.clickToolbar(this, toggleOptions);
+        });
+		
+        $('#ff').find('button.btn-primary').click();
+
+        $$.request('/action/bm/parameter/list', {'dq': '1'}, function (data) {
+            $('#dq').combobox('loadData', data.dq);
+        });
+		
+    });
+</script>
+</body>
+
+</html>

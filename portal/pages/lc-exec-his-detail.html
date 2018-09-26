@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>计提执行记录详情</title>
+    <link href="../lib/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="../lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../lib/layer/theme/default/layer.css" rel="stylesheet">
+    <link href="../lib/viewer/viewer.min.css" rel="stylesheet">
+    <link href="../lib/jquery-easyui/themes/bootstrap/easyui.min.css" rel="stylesheet">
+
+</head>
+
+<body>
+<div class="page">
+    <form id="ff" data-options="onSerialize:$.noop">
+        <table class="table" style="width: 970px;">
+            <!--caption>查询执行记录</caption-->
+            <tr>
+                <td class="text-right col-sm-2">
+                    <label>批次号：</label>
+                </td>
+                <td class="col-sm-4">
+                    <input type="text" name="batch_no" readonly>
+                </td>
+                <td class="text-right col-sm-2">
+                    <label>流程ID：</label>
+                </td>
+                <td class="col-sm-4">
+                    <input type="text" name="lc_id" readonly>
+                </td>
+            </tr>
+            <tr>
+               	<td class="text-right col-sm-2">
+                    <label>创建人：</label>
+                </td>
+                <td class="col-sm-4">
+                    <input type="text" name="created_by" readonly>
+                </td>
+                <td class="text-right col-sm-2">
+                    <label>创建时间：</label>
+                </td>
+                <td class="col-sm-4">
+                    <input type="text" name="created_time" readonly>
+                </td>
+            </tr>
+            <tr>
+                <td class="text-right col-sm-2">
+                    <label>执行状态：</label>
+                </td>
+                <td class="col-sm-4">
+                    <input type="text" name="zxzt_nm" readonly>
+                </td>
+                <td class="text-right col-sm-2">
+                    <label>流程类型：</label>
+                </td>
+                <td class="col-sm-4">
+                    <input type="text" name="lclx_nm" readonly>
+                </td>
+            </tr>
+            <tr>
+                <td class="text-right col-sm-2">
+                    <label>流程名称：</label>
+                </td>
+                <td class="col-sm-4">
+                    <input type="text" name="lc_name">
+                </td>
+                <td class="text-right col-sm-2">
+                    <label>过期时间</label></td>
+                <td class="col-sm-4">
+                    <input id="expire_time" type="text" class="easyui-validatebox Wdate" name="expire_time"
+                           data-options="required:true"
+                           onfocus="WdatePicker()">
+                </td>
+            </tr>
+            <tr>
+                <td class="text-right col-sm-2">
+                    <label>计提月份</label></td>
+                <td class="col-sm-4">
+                    <input id="mon" type="text" class="easyui-validatebox Wdate" name="mon"
+                           data-options="required:true"
+                           onfocus="WdatePicker({dateFmt:'yyyyMM'})">
+                </td>
+                <td class="text-right col-sm-2">
+                    <label>备注：</label>
+                </td>
+                <td class="col-sm-4">
+                    <input type="text" name="note">
+                </td>
+            </tr>
+            <tr class="tf tf-view">
+                <td class="text-right col-sm-2">
+                    <label>rec_id：</label>
+                </td>
+                <td class="col-sm-4">
+                    <input type="text" name="rec_id" readonly>
+                </td>
+            </tr>
+            <tfoot>
+            </tfoot>
+        </table>
+        
+        <br>
+		<div style="width: 1000px;">
+			<div class="row">
+				<div class="col-sm-2"></div>
+				<div class="col-sm-2"></div>
+				<div class="col-sm-6">
+					<button type="button" class="btn btn-default btn-outline" data-options="url:'/action/bm/lc-exec-his/update',success:$.noop" onclick="$$.submit(this)">编辑提交</button>
+					<button type="button" class="btn btn-default btn-outline" onclick="$$.close()">关闭</button>
+				</div>
+			</div>
+		</div>
+    </form>
+</div>
+<script src="../lib/jquery/jquery.min.js"></script>
+<script src="../lib/layer/layer.js"></script>
+<script src="../lib/My97DatePicker/WdatePicker.js"></script>
+<script src="../lib/jquery-easyui/jquery.easyui.min.js"></script>
+<script src="../lib/webuploader/webuploader.min.js"></script>
+<script src="../js/base.js"></script>
+<script src="../js/st.js"></script>
+<script>
+    var query = $$.parseQueryString();
+    var displayType = query.displayType;
+    var operateType = query.operateType;
+
+	var action = {
+		'edit': ['edit','update']
+	};
+	
+    $(function () {
+        $$.transform('#ff', displayType, action);
+		$$.loadForm('#ff', '/action/bm/lc-exec-his/view', query);
+		
+    });
+</script>
+</body>
+
+</html>

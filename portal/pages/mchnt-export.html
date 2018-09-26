@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>参数导出</title>
+    <link href="../lib/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="../lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <link href="../lib/toastr/toastr.min.css" rel="stylesheet">
+    <link href="../lib/jquery-easyui/themes/bootstrap/easyui.min.css" rel="stylesheet">
+
+</head>
+
+<body>
+<div class="page">
+    <form data-options="onSerialize:serializeSearch">
+        <table class="table" style="width: 970px;">
+            <!-- <caption>查询费用信息</caption> -->
+            <tbody>
+            <tr>
+                <td class="text-right col-sm-2">
+                    <label>收单机构</label>
+                </td>
+                <td class="col-sm-4">
+                    <select id="acq_inst_id" name="acq_inst_id">
+                        <option value="">--请选择--</option>
+                    </select>
+                </td>
+                <td class="text-right col-sm-2">
+                    <label>业务类型</label>
+                </td>
+                <td class="col-sm-4">
+                    <select id="busi_type" name="busi_type">
+                        <option value="">--请选择--</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td class="text-right col-sm-2">
+                    <label>创建日期</label>
+                </td>
+                <td class="col-sm-4">
+                    <input id="created_time" type="text" class="Wdate" name="created_time" style="width: 120px;"
+                           onfocus="WdatePicker({onpicked:function(){$dp.$('created_time2').focus();},maxDate:'#F{$dp.$D(\'created_time2\')}'})">
+                    <input id="created_time2" type="text" class="Wdate" name="created_time2" style="width: 120px;"
+                           onfocus="WdatePicker({minDate:'#F{$dp.$D(\'created_time\')}'})">
+                </td>
+                <td class="text-right col-sm-2">
+                </td>
+                <td class="col-sm-4">
+                </td>
+            </tr>
+            </tbody>
+            <tfoot>
+            <tr>
+                <td></td>
+                <td colspan="3">
+                    <button type="button" class="btn btn-primary" data-options="url:'/action/bm/mchnt-export/export'"
+                            onclick="$$.exportData(this)">导出
+                    </button>
+                    <button type="button" class="btn btn-default btn-outline" onclick="$$.reset(this)">重置</button>
+                    <a href="export-file.html" target="_blank" class="pull-right">查看导出记录</a>
+                </td>
+            </tr>
+            </tfoot>
+        </table>
+    </form>
+</div>
+<script src="../lib/jquery/jquery.min.js"></script>
+<script src="../lib/toastr/toastr.min.js"></script>
+<script src="../lib/My97DatePicker/WdatePicker.js"></script>
+<script src="../lib/jquery-easyui/jquery.easyui.min.js"></script>
+<script src="../js/base.js"></script>
+<script src="../js/st.js"></script>
+<script src="../js/param.js"></script>
+<!-- <script src="../js/district.js"></script> -->
+<script>
+    var query = $$.parseQueryString();
+    var displayType = query.displayType;
+    var operateType = query.operateType;
+
+    function serializeSearch(data) {
+        var procStMap = {
+            'receipt': '1',
+            'refund': ['2', '6'],
+            'refund-confirm': '5',
+            'cancel': '1'
+        };
+        data.proc_st2 = procStMap[displayType];
+    }
+
+    function hasNext(oper_in, proc_st, action) {
+        var rows = $$.st.transition[$$.st.alias['expense_info']]
+        return $$.hasNextStatus(rows, oper_in, proc_st, action);
+    }
+
+    function onChangeAcqInstId() {
+        var value = $(this).val();
+        $$.request('/action/bm/acq-inst-busi/list', {
+            acq_inst_id: value
+        }, function (data) {
+            $$.loadSelect('#busi_type', data.rows, {
+                valueField: 'busi_type',
+                textField: 'busi_type_nm'
+            });
+            form.render('select');
+        });
+    }
+
+    $(function () {
+        // $$.transformDisplay('#tb', displayType);
+        $('#acq_inst_id').on('change', onChangeAcqInstId);
+
+        $$.request('/action/bm/parameter/list', {
+            acq_inst: '1'
+        }, function (data) {
+            $$.loadSelect('#acq_inst_id', data.acq_inst, {
+                valueField: 'acq_inst_id',
+                textField: 'acq_inst_nm'
+            });
+        });
+    });
+</script>
+</body>
+
+</html>

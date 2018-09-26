@@ -1,0 +1,68 @@
+/*大小调整*/
+.textbox .textbox-text {
+    font-size: 0.95em;
+}
+
+.panel-title {
+    height: 2em;
+    line-height: 2em;
+    font-size: 0.95em;
+}
+
+.panel-body {
+    font-size: 0.95em;
+}
+
+.datagrid-toolbar {
+    padding: 0;
+}
+
+.datagrid-header-row,
+.datagrid-row {
+    height: 2em;
+}
+
+.datagrid-header .datagrid-cell span {
+    font-size: 0.95em;
+}
+
+.datagrid-cell,
+.datagrid-cell-group,
+.datagrid-cell-rownumber,
+.datagrid-header-rownumber {
+    font-size: 0.95em;
+}
+
+.pagination-page-list,
+.pagination .pagination-num {
+    font-size: 0.95em;
+}
+
+.pagination span {
+    font-size: 0.95em;
+}
+
+.pagination-info {
+    font-size: 0.95em;
+}
+
+.combobox-group,
+.combobox-item,
+.combobox-stick {
+    font-size: 0.95em;
+}
+
+/*颜色调整*/
+.combobox-item-selected {
+    background: #cce6ff;
+    color: #000;
+}
+
+.datagrid-row-selected {
+    background: #cce6ff;
+    color: #000;
+}
+
+.validatebox-invalid {
+    border-color: #ffa8a8 !important;
+}

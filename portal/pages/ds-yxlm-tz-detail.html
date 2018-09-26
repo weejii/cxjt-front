@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>营销联盟台账</title>
+    <link href="../lib/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="../lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <link href="../lib/layer/theme/default/layer.css" rel="stylesheet">
+    <link href="../lib/jquery-easyui/themes/bootstrap/easyui.min.css" rel="stylesheet">
+
+</head>
+
+<body>
+<div class="page">
+    <div id="tb">
+        <a href="#" class="easyui-linkbutton tf tf-yxlm_check1" onclick="onClickCheckPass('tz','1')" data-options="iconCls:'fa fa-bars',plain:true">地市审核通过</a>
+		<a href="#" class="easyui-linkbutton tf tf-yxlm_check1" onclick="onClickCheckNoPass('tz','1')" data-options="iconCls:'fa fa-bars',plain:true">地市审核不通过</a>
+		<a href="#" class="easyui-linkbutton tf tf-yxlm_check1" onclick="$$.batchSubmit(this)" data-options="iconCls:'fa fa-bars',plain:true,url:'/action/bm/ds-yxlm-tz/batch-check1-pass',msg:'审核通过'">地市批量审核通过</a>
+		<a href="#" class="easyui-linkbutton tf tf-yxlm_check1" onclick="$$.batchSubmit(this)" data-options="iconCls:'fa fa-bars',plain:true,url:'/action/bm/ds-yxlm-tz/batch-check1-no-pass',msg:'审核不通过'">地市批量审核不通过</a>
+		<a href="#" class="easyui-linkbutton tf tf-yxlm_check2" onclick="onClickCheckPass('tz','2')" data-options="iconCls:'fa fa-bars',plain:true">创新审核通过</a>
+		<a href="#" class="easyui-linkbutton tf tf-yxlm_check2" onclick="onClickCheckNoPass('tz','2')" data-options="iconCls:'fa fa-bars',plain:true">创新审核不通过</a>
+		<a href="#" class="easyui-linkbutton tf tf-yxlm_check2" onclick="$$.batchSubmit(this)" data-options="iconCls:'fa fa-bars',plain:true,url:'/action/bm/ds-yxlm-tz/batch-check2-pass',msg:'审核通过'">创新批量审核通过</a>
+		<a href="#" class="easyui-linkbutton tf tf-yxlm_check2" onclick="$$.batchSubmit(this)" data-options="iconCls:'fa fa-bars',plain:true,url:'/action/bm/ds-yxlm-tz/batch-check2-no-pass',msg:'审核不通过'">创新批量审核不通过</a>
+		<a href="#" class="easyui-linkbutton tf tf-yxlm_check3" onclick="onClickCheckPass('tz','3')" data-options="iconCls:'fa fa-bars',plain:true">财务审核通过</a>
+		<a href="#" class="easyui-linkbutton tf tf-yxlm_check3" onclick="onClickCheckNoPass('tz','3')" data-options="iconCls:'fa fa-bars',plain:true">财务审核不通过</a>
+		<a href="#" class="easyui-linkbutton tf tf-yxlm_check3" onclick="$$.batchSubmit(this)" data-options="iconCls:'fa fa-bars',plain:true,url:'/action/bm/ds-yxlm-tz/batch-check3-pass',msg:'审核通过'">财务批量审核通过</a>
+		<a href="#" class="easyui-linkbutton tf tf-yxlm_check3" onclick="$$.batchSubmit(this)" data-options="iconCls:'fa fa-bars',plain:true,url:'/action/bm/ds-yxlm-tz/batch-check3-no-pass',msg:'审核不通过'">财务批量审核不通过</a>
+    </div>
+    <table id="dg" class="easyui-datagrid" title="查询结果"
+           data-options="singleSelect:true,onClickRow:onClickrow,pagination:true,rownumbers:true,idField:'rec_id',toolbar:'#tb'">
+        <thead>
+        <tr>
+            <th data-options="field:'chk',checkbox:true"></th>
+            <th data-options="field:'batch_no'">批次号</th>
+            <th data-options="field:'zwsj'">账务时间</th>
+            <th data-options="field:'lx'">类型</th>
+            <th data-options="field:'kpmc'">开票名称</th>
+            <th data-options="field:'kpxm'">开票项目</th>
+            <th data-options="field:'je'">金额</th>
+            <th data-options="field:'bz'">备注</th>
+            <th data-options="field:'sjyt'">实际用途</th>
+            <th data-options="field:'sfbz'">收费标准</th>
+            <th data-options="field:'kpph'">开票票号</th>
+            <th data-options="field:'kpsj'">开票日期</th>
+            <th data-options="field:'dzsj'">到账时间</th>
+            <th data-options="field:'created_by'">创建人</th>
+            <th data-options="field:'created_time'">创建时间</th>
+            <th data-options="field:'operate_name'">操作类型</th>
+			<th data-options="field:'proc_st_nm'">记录状态</th>
+        </tr>
+        </thead>
+    </table>
+    <br>
+    
+    <table id="dg2" class="easyui-datagrid" title="查询结果"
+           data-options="pagination:true,rownumbers:true,idField:'rec_id',toolbar:'#tb2'">
+        <thead>
+        <tr>
+            <th data-options="field:'name',formatter:formatJl">执行记录</th>
+            <th data-options="field:'created_by'">执行人</th>
+            <th data-options="field:'dq'">地区</th>
+            <th data-options="field:'created_time'">执行时间</th>
+            <th data-options="field:'op',formatter:formatOp">操作</th>
+        </tr>
+        </thead>
+    </table>
+    <br>
+    <div style="width: 1000px;">
+		<div class="row">
+			<div class="col-sm-2"></div>
+			<div class="col-sm-2"></div>
+			<div class="col-sm-6">
+				<button type="button" class="btn btn-primary" onclick="onClickCheck()">提交完成</button>
+				<button type="button" class="btn btn-default btn-outline" onclick="window.top.close();">关闭</button>
+			</div>
+		</div>
+	</div>
+</div>
+<script src="../lib/jquery/jquery.min.js"></script>
+<script src="../lib/layer/layer.js"></script>
+<script src="../lib/My97DatePicker/WdatePicker.js"></script>
+<script src="../lib/jquery-easyui/jquery.easyui.min.js"></script>
+<script src="../js/base.js"></script>
+<script src="../js/st.js"></script>
+<script src="../js/param.js"></script>
+<script src="../js/district.js"></script>
+<script>
+    var query = $$.parseQueryString();
+    var displayType = query.displayType;
+    var operateType = query.operateType;
+
+    function reload() {
+        $('#dg').datagrid('reload');
+    }
+	
+	function onClickrow(index, row) {
+		$('#dg2').datagrid({
+            url: $$.wrapUrl('/action/bm/lc-exec-module-detail/search'),
+            pageNumber: 1,
+            queryParams: query,
+            onLoadSuccess: function (data) {
+                $(this).datagrid('clearChecked');
+                //解决滚动条引起的panel宽度问题
+                $(this).datagrid('getPanel').panel('resize');
+            }
+        });
+	}
+	
+	function formatJl(value, row) {
+        if (row.system) {
+			var view = '<a href="'+$$.wrapUrl('/action/uploads/'+row.system)+'" target="_blank">'+value+'</a>';
+			if( $.inArray(row.name.substr(row.name.lastIndexOf('.')).toLowerCase(), [".bmp",".jpg",".png",".tiff",".gif",".pcx",".tga",".exif",".fpx",".svg"]) > 0) {
+				$(view).viewer({
+					title: false,
+					navbar: false,
+					zIndex: 9000
+				});
+			}
+            return view;
+        } else {
+			return value;
+		}
+    }
+	
+	function formatOp(value, row, index) {
+		return null;
+    }
+	
+	function onClickCheckPass(table, index) {
+		var map = {
+			'tz': ['/action/bm/ds-yxlm-tz/check'+index+'-pass', '#dg', '台账']
+		}
+		
+		var url = map[table][0];
+		var dg = map[table][1];
+		var msg = map[table][2];
+		var row = $(dg).datagrid('getSelected');
+		if (row === null) {
+			$$.msg('请选择'+msg+'记录！');
+            return false;
+		}
+		$$.confirm('确认审核通过吗？', function () {
+			$$.request(url, row, function (data) {
+				reload(dg);
+				$$.msg('操作成功');
+			});
+		});
+	}
+	
+	function onClickCheckNoPass(table, index) {
+		var map = {
+			'tz': ['/action/bm/ds-yxlm-tz/check'+index+'-no-pass', '#dg', '台账']
+		}
+		
+		var url = map[table][0];
+		var dg = map[table][1];
+		var msg = map[table][2];
+		var row = $(dg).datagrid('getSelected');
+		if (row === null) {
+			$$.msg('请选择'+msg+'记录！');
+            return false;
+		}
+		$$.confirm('确认审核不通过吗？', function () {
+			$$.request(url, row, function (data) {
+				reload(dg);
+				$$.msg('操作成功');
+			});
+		});
+	}
+	
+	function onClickCheck() {
+		$$.confirm('确认提交完成吗？', function () {
+			$$.request('/action/bm/lc-exec-detail-his/check', query, function (data) {
+				$$.msg('操作成功');
+				window.top.close();
+			});
+		});
+	}
+	
+	var type = {
+		'yxlm_check1': '1',
+		'yxlm_check2': '2',
+		'yxlm_check3': '3'
+	};
+	
+    $(function () {
+		$$.transform('.page', operateType, {
+            'yxlm_check1': ['create', 'update'],
+			'yxlm_check2': ['create', 'update'],
+			'yxlm_check3': ['create', 'update']
+        });
+		
+		var param = $.extend({}, query, {
+			proc_st: type[operateType]
+		});
+		
+		$('#dg').datagrid({
+            url: $$.wrapUrl('/action/bm/ds-yxlm-tz/search'),
+            pageNumber: 1,
+            queryParams: param,
+            onLoadSuccess: function (data) {
+                $(this).datagrid('clearChecked');
+                //解决滚动条引起的panel宽度问题
+                $(this).datagrid('getPanel').panel('resize');
+            }
+        });
+    });
+</script>
+</body>
+
+</html>

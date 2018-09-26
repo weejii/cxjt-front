@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>流程</title>
+    <link href="../lib/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="../lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="../lib/webuploader/webuploader.css">
+    <link href="../lib/layer/theme/default/layer.css" rel="stylesheet">
+    <link href="../lib/jquery-easyui/themes/bootstrap/easyui.min.css" rel="stylesheet">
+</head>
+
+<body>
+<div class="page">
+    <form id="ff" data-options="onSerialize:$.noop">
+        <table class="table" style="width: 970px;">
+            <caption>查询流程</caption>
+            <tr>
+                <td class="text-right col-sm-2">
+                    <label>流程名称：</label>
+                </td>
+                <td class="col-sm-4">
+                    <input type="text" name="lc_name">
+                </td>
+                <td class="text-right col-sm-2">
+                    <label>流程类型：</label></td>
+                <td class="col-sm-4">
+                    <div class="col-sm-12" style="padding:0;">
+                        <input type="text" id="lclx" name="lclx" class="easyui-combobox">
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="text-right col-sm-2">
+                    <label>创建时间：</label>
+                </td>
+                <td class="col-sm-4">
+                    <input id="created_time1" type="text" class="Wdate" name="created_time1" style="width: 120px;"
+                           onfocus="WdatePicker({onpicked:function(){$dp.$('created_time2').focus();},maxDate:'#F{$dp.$D(\'created_time2\')}'})">
+                    <input id="created_time2" type="text" class="Wdate" name="created_time2" style="width: 120px;"
+                           onfocus="WdatePicker({minDate:'#F{$dp.$D(\'created_time1\')}'})">
+                </td>
+                <td>
+                </td>
+            </tr>
+            <tfoot>
+            <tr>
+                <td></td>
+                <td align="right">
+                    <button type="button" class="btn btn-primary"
+                            data-options="datagrid:'#dg',url:'/action/bm/lc-group/search'"
+                            onclick="$$.search(this)">查询
+                    </button>
+                </td>
+                <td align="left">
+                    <button type="button" class="btn btn-default btn-outline" onclick="$$.reset(this)">重置</button>
+                </td>
+                <td></td>
+            </tr>
+            </tfoot>
+        </table>
+    </form>
+    
+    <div id="tb">
+        <a href="#" class="easyui-linkbutton" data-options="iconCls:'fa fa-bars',plain:true"
+           onclick="publish()">发布流程</a>
+    </div>
+
+    <table id="dg" class="easyui-datagrid" title="流程组"
+           data-options="singleSelect:true,pagination:true,rownumbers:true,toolbar:'#tb',idField:'rec_id',onClickRow:onClickLcGroup">
+        <thead>
+        <tr>
+            <th data-options="field:'lc_id',width:100">流程ID</th>
+            <th data-options="field:'lc_name',width:150">流程名称</th>
+            <th data-options="field:'zxzt_nm',width:100">执行状态</th>
+            <th data-options="field:'lclx_nm',width:100">流程类型</th>
+            <th data-options="field:'created_time',width:150">创建时间</th>
+            <th data-options="field:'execute_day',width:100">执行限期(天)</th>
+        </tr>
+        </thead>
+    </table>
+    <br>
+    <!--div id="uploadimg"> 
+ <div id="fileList" class="uploader-list"></div> 
+ <div id="imgPicker">选择图片</div--> 
+</div>
+    <table id="dg2" class="easyui-datagrid" title="流程明细" data-options="singleSelect:true,pagination:true,rownumbers:true,idField:'rec_id'">
+        <thead>
+        <tr>
+            <th data-options="field:'lc_sub_name',width:180">子流程名称</th>
+            <th data-options="field:'lc_sub_zt_nm',width:100">子流程状态</th>
+            <th data-options="field:'lc_sub_fj',width:120,formatter:formatFj">附件模板</th>
+            <th data-options="field:'execute_day',width:100">执行限期(天)</th>
+            <th data-options="field:'execute_group_nm',width:80">执行组</th>
+        </tr>
+        </thead>
+    </table>
+</div>
+<script src="../lib/jquery/jquery.min.js"></script>
+<script src="../lib/layer/layer.js"></script>
+<script src="../lib/My97DatePicker/WdatePicker.js"></script>
+<script src="../lib/jquery-easyui/jquery.easyui.min.js"></script>
+<script src="../lib/webuploader/webuploader.min.js"></script>
+<script src="../js/base.js"></script>
+<script src="../js/st.js"></script>
+<script>
+    var query = $$.parseQueryString();
+    var displayType = query.displayType;
+    var operateType = query.operateType;
+
+    function reload() {
+        $('#dg').datagrid('reload');
+    }
+
+    function initUpload(options) {
+		
+        options = $.extend({
+            accept: null,
+            beforeFileQueued: $.noop,
+            uploadSuccess: $.noop,
+        }, options || {});
+
+        var uploader = WebUploader.create({
+            auto: true,
+            swf: 'lib/webuploader/Uploader.swf',
+            server: $$.wrapUrl('/action/bm/upload'),
+            pick: '.webuploader',
+			threads: 1,
+			fileNumLimit:1,
+			fileSingleSizeLimit: 5*1024*1024,
+            accept: {
+				title: 'file',
+				extensions: 'xls,xlsx',
+				mimeTypes: 'application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+			}
+        })
+		
+		
+        var element;
+		
+        $('.webuploader').on('click', function (event) {
+            // set $upload
+            //element = this;
+            uploader.reset();
+        });
+		
+		/*
+        uploader.on('beforeFileQueued', function (file) {
+            return options.beforeFileQueued.call(element, file)
+        });
+		
+        uploader.on('fileQueued', function (file) {
+			alert('fileQueued');
+        });
+		
+		uploader.on('uploadProgress', function( file, percentage ) {
+			alert('uploadProgress');
+		});
+		*/
+        uploader.on('uploadSuccess', function (file, response) {
+            options.uploadSuccess.call(element, file, response);
+        });
+
+        uploader.on('uploadError', function (file, reason) {
+            $$.msg(reason);
+        });
+
+        uploader.on('uploadComplete', function (file) {
+			
+        });
+
+        uploader.on('error', function (type) {
+            if (type=="Q_TYPE_DENIED"){
+				$$.msg("请上传XLS、XLSX格式文件");
+			} else if(type=="F_EXCEED_SIZE"){
+				$$.msg("文件大小不能超过5M");
+			}
+        });
+    }
+	
+    function formatFj(value) {
+        if (value) {
+            return '<a href="'+$$.wrapUrl('/action/exports/'+value)+'" target="_blank">查看模板</a>';
+        }
+    }
+	
+	function uploadsuccess(file, response) {
+		var $upload = $(this);
+		$$.request('/action/bm/ds-post/import-xls', {
+			file_type: '1',
+			url: response.url,
+			filename: file.name
+		}, function (data) {
+			$$.msg('操作成功');
+		});
+	}
+	
+	function onClickLcGroup(index, row) {
+		var params = {lc_id: row.lc_id};
+		$('#dg2').datagrid({
+            url: $$.wrapUrl('/action/bm/lc-group-detail/search'),
+            pageNumber: 1,
+            queryParams: params,
+            onLoadSuccess: function (data) {
+                $(this).datagrid('clearChecked');
+                //解决滚动条引起的panel宽度问题
+                $(this).datagrid('getPanel').panel('resize');
+            }
+        });
+	}
+
+    function publish() {
+        var row = $('#dg').datagrid('getSelected');
+        if (row === null) {
+            $$.msg('请选择记录！');
+            return false;
+        } /*else if ($.inArray(row.state, ['WAITING', 'ACQUIRED', 'ERROR']) < 0) {
+            $$.msg('当前状态不能暂停调度');
+            return false;
+        }*/ else {
+            $$.confirm('确认要发布工作流程？', function () {
+                $$.request('/action/bm/lc-exec-detail-his/create', {
+                    rec_id: row.rec_id,
+					lc_id: row.lc_id
+                }, function () {
+                    reload();
+                    $$.msg('操作成功');
+                });
+            });
+        }
+    }
+
+    var toggleOptions = {
+        
+    };
+
+    function formatPriority(value) {
+        var rows = [{
+            'value': '1',
+            'text': '低'
+        }, {
+            'value': '2',
+            'text': '中'
+        }, {
+            'value': '3',
+            'text': '高'
+        }];
+
+        return $$.formatField(rows, value);
+    }
+
+    $(function () {
+        $('form').on('keyup', function (event) {
+            if (event.keyCode == 13) {
+                $(this).find('button.btn-primary').click();
+            }
+        });
+
+        $('#tb a.easyui-linkbutton[data-toggle]').on('click', function (event) {
+            event.preventDefault();
+            $$.clickToolbar(this, toggleOptions);
+        });
+
+
+		$$.request('/action/bm/parameter/list', {'lclx': '1'}, function (data) {
+            $('#lclx').combobox('loadData', data.lclx);
+        });
+		
+        $('#ff').find('button.btn-primary').click();
+		
+    });
+</script>
+</body>
+
+</html>

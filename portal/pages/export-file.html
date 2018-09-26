@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>导出文件</title>
+    <link href="../lib/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="../lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <link href="../lib/toastr/toastr.min.css" rel="stylesheet">
+    <link href="../lib/jquery-easyui/themes/bootstrap/easyui.min.css" rel="stylesheet">
+
+</head>
+
+<body>
+<div class="page">
+    <form data-options="onSerialize:serializeSearch">
+        <table class="table" style="width: 970px;">
+            <!-- <caption>查询导出文件</caption> -->
+            <tbody>
+            <tr>
+                <td class="text-right col-sm-2">
+                    <label>导出类型</label>
+                </td>
+                <td class="col-sm-4">
+                    <select id="export_type" name="export_type">
+                        <option value="">--请选择--</option>
+                    </select>
+                </td>
+                <td class="text-right col-sm-2">
+                </td>
+                <td class="col-sm-4">
+                </td>
+            </tr>
+            </tbody>
+            <tfoot>
+            <tr>
+                <td></td>
+                <td colspan="3">
+                    <button type="button" id="search-btn" class="btn btn-primary"
+                            data-options="datagrid:'#dg',url:'/action/bm/export-file/search'" onclick="$$.search(this)">
+                        查询
+                    </button>
+                    <button type="button" class="btn btn-default btn-outline" onclick="$$.reset(this)">重置</button>
+                </td>
+            </tr>
+            </tfoot>
+        </table>
+    </form>
+    <table id="dg" class="easyui-datagrid" title="导出文件"
+           data-options="singleSelect:true,pagination:true,rownumbers:true,idField:'rec_id'">
+        <thead>
+        <tr>
+            <th data-options="field:'export_type_nm',width:120">导出类型</th>
+            <th data-options="field:'rec_id',width:120">批次号</th>
+            <th data-options="field:'remark',width:100">备注</th>
+            <th data-options="field:'created_by',width:100">操作人</th>
+            <th data-options="field:'created_time',width:150">操作时间</th>
+            <th data-options="field:'op',width:200,formatter:formatOp">操作</th>
+        </tr>
+        </thead>
+    </table>
+</div>
+<script src="../lib/jquery/jquery.min.js"></script>
+<script src="../lib/toastr/toastr.min.js"></script>
+<script src="../lib/My97DatePicker/WdatePicker.js"></script>
+<script src="../lib/jquery-easyui/jquery.easyui.min.js"></script>
+<script src="../js/base.js"></script>
+<script src="../js/st.js"></script>
+<script src="../js/param.js"></script>
+<!-- <script src="../js/district.js"></script> -->
+<script>
+    var query = $$.parseQueryString();
+    var displayType = query.displayType;
+    var operateType = query.operateType;
+
+    function serializeSearch(data) {
+        data.remark = $('#export_type').find('option:selected').text();
+    }
+
+    function formatOp(value, row, index) {
+        var operate = '';
+        if (row.export_url) {
+            operate += '<a href="' + $$.wrapUrl(row.export_url) + '" target="_blank">下载</a>';
+        }
+
+        if (row.export_type == '2') {
+            operate += '<a href="#" class="btn" onclick="exportElecInfo(\'' + row.rec_id + '\')">导出影印件</a>';
+        }
+        return operate;
+    }
+
+
+    function exportElecInfo(batch_no) {
+        $$.request('/action/bm/mchnt-export/export-elec', {
+            batch_no: batch_no
+        }, function (data) {
+            $$.success('操作成功');
+
+            var iframe = $('<iframe src="' + $$.wrapUrl(data.url) + '" style="display:none;"></iframe>').appendTo('body');
+            setTimeout(function () {
+                iframe.remove();
+            }, 1000);
+        });
+    }
+
+    $(function () {
+        // $$.transformDisplay('#tb', displayType);
+
+        $$.request('/action/bm/parameter/list', {
+            export_type: '1'
+        }, function (data) {
+            $$.loadSelect('#export_type', data.export_type);
+        });
+
+        $('#search-btn').click();
+    });
+</script>
+</body>
+
+</html>

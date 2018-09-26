@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>营销联盟台账</title>
+    <link href="../lib/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="../lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <link href="../lib/layer/theme/default/layer.css" rel="stylesheet">
+    <link href="../lib/jquery-easyui/themes/bootstrap/easyui.min.css" rel="stylesheet">
+
+</head>
+
+<body>
+<div class="page">
+    <form id="ff" data-options="onSerialize:$.noop">
+        <table class="table" style="width: 970px;">
+            <caption>查询营销联盟台账</caption>
+            <tbody>
+            <tr>
+                <td class="text-right col-sm-2">
+                    <label>地级市</label></td>
+                <td class="col-sm-4">
+                    <div class="col-sm-12" style="padding:0;">
+                        <input type="text" id="dq" name="dq" class="easyui-combobox">
+                    </div>
+                </td>
+                <td class="text-right col-sm-2">
+                    <label>拓展人</label></td>
+                <td class="col-sm-4">
+                    <div class="col-sm-12" style="padding:0;">
+                        <input type="text" id="tzr" name="tzr" class="easyui-combobox" data-options="valueField: 'tzr',textField: 'tzr'">
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+            	<td class="text-right col-sm-2">
+                    <label>业务类型</label></td>
+                <td class="col-sm-4">
+                    <div class="col-sm-12" style="padding:0;">
+                        <input type="text" id="ywlx" name="ywlx" class="easyui-combobox" data-options="panelHeight:'auto'">
+                    </div>
+                </td>
+            </tr>
+
+            </tbody>
+
+            <tfoot>
+            <tr>
+                <td></td>
+                <td></td>
+                <td colspan="3">
+                    <button type="button" class="btn btn-primary" onclick="$$.search(this)"
+                            data-options="datagrid:'#dg',url:'/action/bm/ds-yxlm-tz/search'">
+                        查询
+                    </button>
+                    <button type="button" class="btn btn-default btn-outline" onclick="$$.reset(this)">重置</button>
+                </td>
+            </tr>
+            </tfoot>
+        </table>
+    </form>
+    <div id="tb">
+        <a href="#" class="easyui-linkbutton" data-toggle="view" data-options="iconCls:'fa fa-bars',plain:true">查看详情</a>
+    </div>
+    <table id="dg" class="easyui-datagrid" title="查询结果"
+           data-options="singleSelect:true,pagination:true,rownumbers:true,idField:'rec_id',toolbar:'#tb'">
+        <thead>
+        <tr>
+            <th data-options="field:'chk',checkbox:true"></th>
+            <th data-options="field:'batch_no',width:80">批次号</th>
+            <th data-options="field:'zwsj',width:60">账务时间</th>
+            <th data-options="field:'lx',width:80">类型</th>
+            <th data-options="field:'kpmc',width:250">开票名称</th>
+            <th data-options="field:'kpxm',width:80">开票项目</th>
+            <th data-options="field:'je',width:60">金额</th>
+            <th data-options="field:'bz',width:60">备注</th>
+            <th data-options="field:'sjyt',width:60">实际用途</th>
+            <th data-options="field:'sfbz',width:100">收费标准</th>
+            <th data-options="field:'kpph',width:100">开票票号</th>
+            <th data-options="field:'kpsj',width:100">开票日期</th>
+            <th data-options="field:'dzsj',width:100">到账时间</th>
+            <th data-options="field:'created_by',width:100">创建人</th>
+            <th data-options="field:'created_time',width:100">创建时间</th>
+        </tr>
+        </thead>
+    </table>
+</div>
+<script src="../lib/jquery/jquery.min.js"></script>
+<script src="../lib/layer/layer.js"></script>
+<script src="../lib/My97DatePicker/WdatePicker.js"></script>
+<script src="../lib/jquery-easyui/jquery.easyui.min.js"></script>
+<script src="../js/base.js"></script>
+<script src="../js/st.js"></script>
+<script src="../js/param.js"></script>
+<script src="../js/district.js"></script>
+<script>
+    var query = $$.parseQueryString();
+    var displayType = query.displayType;
+    var operateType = query.operateType;
+
+    function reload() {
+        $('#dg').datagrid('reload');
+    }
+
+	function onChangeCity() {
+        var value = $(this).val();
+        $$.request('/action/bm/tzr/list', {
+            dq: value
+        }, function (data) {
+            $('#tzr').combobox('loadData',data.tzr);
+        });
+    }
+	
+	var toggleOptions = {
+        options: {
+			view: {
+				url: 'ds-yxlm-fpmx-detail.html'
+			}
+        },
+        params: {
+			view: {
+				
+			}
+		}
+    };
+	
+    $(function () {
+        $('form').on('keyup', function (event) {
+            if (event.keyCode == 13) {
+                $(this).find('button.btn-primary').click();
+            }
+        });
+		
+		$('#tb a.easyui-linkbutton[data-toggle]').on('click', function (event) {
+            event.preventDefault();
+            $$.clickToolbar(this, toggleOptions);
+        });
+		
+        $('#ff').find('button.btn-primary').click();
+
+        $$.request('/action/bm/parameter/list', {'dq': '1'}, function (data) {
+            $('#dq').combobox('loadData', data.dq);
+        });
+		
+    });
+</script>
+</body>
+
+</html>

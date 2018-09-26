@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>营销联盟开票详情</title>
+    <link href="../lib/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="../lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="../lib/webuploader/webuploader.css">
+    <link href="../lib/layer/theme/default/layer.css" rel="stylesheet">
+    <link href="../lib/viewer/viewer.min.css" rel="stylesheet">
+    <link href="../lib/jquery-easyui/themes/bootstrap/easyui.min.css" rel="stylesheet">
+</head>
+
+<body>
+<div class="page">
+    <form id="ff" data-options="onSerialize:$.noop">
+        <table class="table" style="width: 970px;">
+            <!--caption>查询执行记录</caption-->
+            <tr>
+                <td class="text-right col-sm-2">
+                    <label>批次号：</label>
+                </td>
+                <td class="col-sm-4">
+                    <input type="text" name="batch_no">
+                </td>
+                <td class="text-right col-sm-2">
+                    <label>地区：</label>
+                </td>
+                <td class="col-sm-4">
+                    <input type="text" name="dq">
+                </td>
+            </tr>
+            <tr>
+               	<td class="text-right col-sm-2">
+                    <label>开票时间：</label>
+                </td>
+                <td class="col-sm-4">
+                    <input type="text" name="kpsj">
+                </td>
+                <td class="text-right col-sm-2">
+                    <label>类型：</label>
+                </td>
+                <td class="col-sm-4">
+                    <input type="text" name="lx">
+                </td>
+            </tr>
+            <tr>
+               <td class="text-right col-sm-2">
+                    <label>开票名称：</label>
+                </td>
+                <td class="col-sm-4">
+                    <input type="text" name="kpmc">
+                </td>
+                <td class="text-right col-sm-2">
+                    <label>开票项目：</label>
+                </td>
+                <td class="col-sm-4">
+                    <input type="text" name="kpxm">
+                </td>
+            </tr>
+            <tr>
+               <td class="text-right col-sm-2">
+                    <label>备注：</label>
+                </td>
+                <td class="col-sm-4">
+                    <input type="text" name="bz">
+                </td>
+                <td class="text-right col-sm-2">
+                    <label>商户号：</label>
+                </td>
+                <td class="col-sm-4">
+                    <input type="text" name="shh">
+                </td>
+            </tr>
+            <tr>
+               <td class="text-right col-sm-2">
+                    <label>终端号：</label>
+                </td>
+                <td class="col-sm-4">
+                    <input type="text" name="zdh">
+                </td>
+                <td class="text-right col-sm-2">
+                    <label>POS台数：</label>
+                </td>
+                <td class="col-sm-4">
+                    <input type="text" name="posts">
+                </td>
+            </tr>
+            <tr>
+               <td class="text-right col-sm-2">
+                    <label>使用月数：</label>
+                </td>
+                <td class="col-sm-4">
+                    <input type="text" name="syys">
+                </td>
+                <td class="text-right col-sm-2">
+                    <label>收费标准：</label>
+                </td>
+                <td class="col-sm-4">
+                    <input type="text" name="sfbz">
+                </td>
+            </tr>
+            <tr>
+               <td class="text-right col-sm-2">
+                    <label>收费总金额：</label>
+                </td>
+                <td class="col-sm-4">
+                    <input type="text" name="sfjz">
+                </td>
+                <td class="text-right col-sm-2">
+                    <label>收费开始日期：</label>
+                </td>
+                <td class="col-sm-4">
+                    <input type="text" name="sfksrq">
+                </td>
+            </tr>
+            <tr>
+               <td class="text-right col-sm-2">
+                    <label>收费结束日期：</label>
+                </td>
+                <td class="col-sm-4">
+                    <input type="text" name="sfjsrq">
+                </td>
+                <td class="text-right col-sm-2">
+                    <label>票据号：</label>
+                </td>
+                <td class="col-sm-4">
+                    <input type="text" name="pjh">
+                </td>
+            </tr>
+            <tr>
+               <td class="text-right col-sm-2">
+                    <label>经办人：</label>
+                </td>
+                <td class="col-sm-4">
+                    <input type="text" name="jbr">
+                </td>
+                <td class="text-right col-sm-2">
+                    <label>实际费用明细：</label>
+                </td>
+                <td class="col-sm-4">
+                    <input type="text" name="sjfymx">
+                </td>
+            </tr>
+            <tr>
+               <td class="text-right col-sm-2">
+                    <label>寄件地址：</label>
+                </td>
+                <td class="col-sm-4">
+                    <input type="text" name="jjdz">
+                </td>
+                <td class="text-right col-sm-2">
+                    <label>创建人：</label>
+                </td>
+                <td class="col-sm-4">
+                    <input type="text" name="created_by">
+                </td>
+            </tr>
+            <tr>
+               <td class="text-right col-sm-2">
+                    <label>创建时间：</label>
+                </td>
+                <td class="col-sm-4">
+                    <input type="text" name="created_time">
+                </td>
+                <td class="text-right col-sm-2">
+                    <label>审核人：</label>
+                </td>
+                <td class="col-sm-4">
+                    <input type="text" name="checked_by">
+                </td>
+            </tr>
+            <tr>
+               <td class="text-right col-sm-2">
+                    <label>审核时间：</label>
+                </td>
+                <td class="col-sm-4">
+                    <input type="text" name="checked_time">
+                </td>
+                <td class="text-right col-sm-2">
+                    <label>审核人：</label>
+                </td>
+                <td class="col-sm-4">
+                    <input type="text" name="checked_by">
+                </td>
+            </tr>
+            <tfoot>
+            <!--tr>
+                <td></td>
+                <td colspan="3">
+                    <button type="button" class="btn btn-primary"
+                            data-options="datagrid:'#dg',url:'/action/bm/lc-exec-his/search'"
+                            onclick="$$.search(this)">查询
+                    </button>
+                    <button type="button" class="btn btn-default btn-outline" onclick="$$.reset(this)">重置</button>
+                </td>
+            </tr-->
+            </tfoot>
+        </table>
+    </form>
+    
+    <br>
+    <div style="width: 1000px;">
+        <div class="row">
+            <div class="col-sm-2"></div>
+            <div class="col-sm-2"></div>
+            <div class="col-sm-6">
+                <button type="button" class="btn btn-default btn-outline" onclick="$$.close()">关闭</button>
+            </div>
+        </div>
+    </div>
+
+</div>
+    
+</div>
+<script src="../lib/jquery/jquery.min.js"></script>
+<script src="../lib/layer/layer.js"></script>
+<script src="../lib/viewer/viewer.min.js"></script>
+<script src="../lib/My97DatePicker/WdatePicker.js"></script>
+<script src="../lib/jquery-easyui/jquery.easyui.min.js"></script>
+<script src="../lib/webuploader/webuploader.min.js"></script>
+<script src="../js/base.js"></script>
+<script src="../js/st.js"></script>
+<script>
+    var query = $$.parseQueryString();
+    var displayType = query.displayType;
+    var operateType = query.operateType;
+
+    $(function () {
+		$$.loadForm('#ff', '/action/bm/ds-yxlm-fpmx/view', query);
+		
+</script>
+</body>
+
+</html>

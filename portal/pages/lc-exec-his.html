@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>计提执行记录</title>
+    <link href="../lib/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="../lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="../lib/webuploader/webuploader.css">
+    <link href="../lib/layer/theme/default/layer.css" rel="stylesheet">
+    <link href="../lib/viewer/viewer.min.css" rel="stylesheet">
+    <link href="../lib/jquery-easyui/themes/bootstrap/easyui.min.css" rel="stylesheet">
+
+	<style>
+		button {
+			border：none;
+			position: relative;
+			padding: 10px 10px;
+			border-radius: 3px;
+			width: 78px; 
+			height: 30px; 
+			background: #00b7ee; 
+			color: #fff; 
+			overflow: hidden;
+		}
+	</style>
+</head>
+
+<body>
+<div class="page">
+    <form id="ff" data-options="onSerialize:$.noop">
+        <table class="table" style="width: 970px;">
+            <caption>查询执行记录</caption>
+            <tr>
+                <td class="text-right col-sm-2">
+                    <label>批次号：</label>
+                </td>
+                <td class="col-sm-4">
+                    <input type="text" name="batch_no">
+                </td>
+                <td class="text-right col-sm-2">
+                    <label>流程名称：</label>
+                </td>
+                <td class="col-sm-4">
+                    <input type="text" name="lc_name">
+                </td>
+            </tr>
+            <tr>
+                <td class="text-right col-sm-2">
+                    <label>创建时间：</label>
+                </td>
+                <td class="col-sm-4">
+                    <input id="created_time1" type="text" class="Wdate" name="created_time1" style="width: 120px;"
+                           onfocus="WdatePicker({onpicked:function(){$dp.$('created_time2').focus();},maxDate:'#F{$dp.$D(\'created_time2\')}'})">
+                    <input id="created_time2" type="text" class="Wdate" name="created_time2" style="width: 120px;"
+                           onfocus="WdatePicker({minDate:'#F{$dp.$D(\'created_time1\')}'})">
+                </td>
+                <td class="text-right col-sm-2">
+                    <label>执行时间：</label>
+                </td>
+                <td class="col-sm-4">
+                    <input id="exec_time1" type="text" class="Wdate" name="exec_time1" style="width: 120px;"
+                           onfocus="WdatePicker({onpicked:function(){$dp.$('exec_time2').focus();},maxDate:'#F{$dp.$D(\'exec_time2\')}'})">
+                    <input id="exec_time2" type="text" class="Wdate" name="exec_time2" style="width: 120px;"
+                           onfocus="WdatePicker({minDate:'#F{$dp.$D(\'exec_time1\')}'})">
+                </td>
+            </tr>
+            <tfoot>
+            <tr>
+                <!--td></td>
+                <td></td>
+                <td colspan="3">
+                    <button type="button" class="btn btn-primary"
+                            data-options="datagrid:'#dg',url:'/action/bm/lc-exec-his/search'"
+                            onclick="$$.search(this)">查询
+                    </button>
+                    <button type="button" class="btn btn-default btn-outline" onclick="$$.reset(this)">重置</button>
+                </td-->
+                <td></td>
+                <td align="right">
+                    <button type="button" class="btn btn-primary"
+                            data-options="datagrid:'#dg',url:'/action/bm/lc-exec-his/search'"
+                            onclick="$$.search(this)">查询
+                    </button>
+                </td>
+                <td align="left">
+                    <button type="button" class="btn btn-default btn-outline" onclick="$$.reset(this)">重置</button>
+                </td>
+                <td></td>
+            </tr>
+            </tfoot>
+        </table>
+    </form>
+    
+    <div id="tb">
+        <a href="#" class="easyui-linkbutton" data-toggle="edit" data-options="iconCls:'fa fa-bars',plain:true">编辑</a>
+    </div>
+    <table id="dg" class="easyui-datagrid" title="任务记录" data-options="singleSelect:true,pagination:true,rownumbers:true,toolbar:'#tb',idField:'rec_id',onClickRow:onClickLc">
+        <thead>
+        <tr>
+            <th data-options="field:'batch_no',width:100">批次号</th>
+            <th data-options="field:'lc_name',width:120">流程名称</th>
+            <th data-options="field:'zxzt_nm',width:100">执行状态</th>
+            <th data-options="field:'lclx_nm',width:100">流程类型</th>
+            <th data-options="field:'created_time',width:150">创建时间</th>
+            <th data-options="field:'expire_time',width:150">过期时间</th>
+            <th data-options="field:'mon',width:80">计提月份</th>
+            <th data-options="field:'note',width:250">备注</th>
+        </tr>
+        </thead>
+    </table>
+    <br>
+    <div id="tb2">
+        <a href="#" class="easyui-linkbutton" data-toggle="view" data-options="iconCls:'fa fa-bars',plain:true">查看进度</a>
+        <a href="#" id="check" class="easyui-linkbutton hide" data-options="iconCls:'fa fa-bars',plain:true" onclick="onClickCheck()">汇总提交</a>
+    </div>
+    <table id="dg2" class="easyui-datagrid" title="子任务记录" data-options="singleSelect:true,onClickRow:onClickrow,pagination:true,toolbar:'#tb2',idField:'rec_id'">
+        <thead>
+        <tr>
+            <th data-options="field:'batch_no',width:80">批次号</th>
+            <th data-options="field:'lc_sub_name',width:180">子流程名称</th>
+            <th data-options="field:'lc_sub_zt_nm',width:80">子流程状态</th>
+            <th data-options="field:'lc_sub_lx_nm',width:80">子流程类型</th>
+            <th data-options="field:'expire_time',width:150">过期时间</th>
+            <th data-options="field:'checked_nm',width:120">是否需审核</th>
+            <th data-options="field:'execute_group_nm',width:100">执行组</th>
+            <th data-options="field:'lc_sub_fj',width:100,formatter:formatFj">附件模板</th>
+            <th data-options="field:'op',width:120,formatter:formatOp">操作</th>
+        </tr>
+        </thead>
+    </table>
+</div>
+    
+<script src="../lib/jquery/jquery.min.js"></script>
+<script src="../lib/layer/layer.js"></script>
+<script src="../lib/My97DatePicker/WdatePicker.js"></script>
+<script src="../lib/jquery-easyui/jquery.easyui.min.js"></script>
+<script src="../lib/webuploader/webuploader.min.js"></script>
+<script src="../js/base.js"></script>
+<script src="../js/st.js"></script>
+<script>
+    var query = $$.parseQueryString();
+    var displayType = query.displayType;
+    var operateType = query.operateType;
+
+    function reload() {
+        $('#dg').datagrid('reload');
+		$('#dg2').datagrid('reload');
+    }
+
+    function initUpload(options) {
+		
+        options = $.extend({
+            accept: null,
+            beforeFileQueued: $.noop,
+            uploadSuccess: $.noop,
+        }, options || {});
+
+        var uploader = WebUploader.create({
+            auto: true,
+            swf: 'lib/webuploader/Uploader.swf',
+            server: $$.wrapUrl('/action/upload'),
+            pick: 'a[name="file"]',
+			threads: 1,
+			timeout: 3*60*100,
+			fileNumLimit:1,
+			fileSingleSizeLimit: 15*1024*1024/*,
+            accept: {
+				title: 'file',
+				extensions: 'xls,xlsx',
+				mimeTypes: 'application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+			}*/
+        })
+		
+		
+        var element;
+		
+        $('a[name="file"]').on('click', function (event) {
+            // set $upload
+            //element = this;
+            uploader.reset();
+        });
+		
+		/*
+        uploader.on('beforeFileQueued', function (file) {
+            return options.beforeFileQueued.call(element, file)
+        });
+		
+        uploader.on('fileQueued', function (file) {
+			alert('fileQueued');
+        });
+		
+		uploader.on('uploadProgress', function( file, percentage ) {
+			alert('uploadProgress');
+		});
+		*/
+        uploader.on('uploadSuccess', function (file, response) {
+            options.uploadSuccess.call(element, file, response);
+        });
+
+        uploader.on('uploadError', function (file, reason) {
+            $$.msg(reason);
+        });
+
+        uploader.on('uploadComplete', function (file) {
+			
+        });
+
+        uploader.on('error', function (type) {
+            if (type=="Q_TYPE_DENIED"){
+				$$.msg("请上传XLS、XLSX格式文件");
+			} else if(type=="F_EXCEED_SIZE"){
+				$$.msg("文件大小不能超过15M");
+			}
+        });
+    }
+	
+	function onClickrow(index, row) {
+		if(row.checked == '1' && row.lc_sub_zt != '3'/* && row.op_flag != '0'*/) {
+			$('#check').removeClass('hide');
+		}
+		else {
+			$('#check').addClass('hide');
+		}
+	}
+	
+    function formatFj(value) {
+        if (value) {
+            return '<a href="'+$$.wrapUrl('/action/exports/'+value)+'" target="_blank">查看模板</a>';
+        }
+    }
+
+	function onClickCheck() {
+		var row = $('#dg2').datagrid('getSelected');
+        if (row === null) {
+            $$.msg('请选择记录！');
+            return false;
+        } 
+		
+		$$.confirm('确认要审核通过？', function () {
+			$$.request('/action/bm/lc-exec-detail-his/check', row, function () {
+				reload();
+				$$.msg('操作成功');
+			});
+		});
+	}
+	
+	function exportData(index) {
+		var row = $('#dg2').datagrid('getRows')[index];
+		$$.request(row.url, row, function (data) {
+			var iframe = $('<iframe src="' + $$.wrapUrl(data.url) + '" style="display:none;"></iframe>').appendTo('body');
+			setTimeout(function () {
+				iframe.remove();
+			}, 1000);
+			reload();
+		});
+	}
+	
+	function request(index) {
+		var row = $('#dg2').datagrid('getRows')[index];
+		$$.confirm('确认要执行操作吗？', function () {
+			$(this).attr("disabled",true);
+			$$.request(row.url, row, function (data) {
+				reload();
+				$$.msg('操作成功');
+				$(this).attr("disabled",false);
+			});
+		});
+	}
+	
+	function formatOp(value, row, index) {
+            //return '<a class="webuploader" name="file">上传附件</a>';
+		if(row.op_flag == '0' && row.lc_sub_zt == '1') {
+			if(row.lc_sub_lx == '1')
+				return '<div style="height:30px;margin: 2px 2px;"><a href="javascript:void(0)" name="file">上传附件</a><div>';
+			else if(row.lc_sub_lx == '2') {
+				return '<button onclick="exportData('+index+')">导出附件</button>';
+			} else if(row.lc_sub_lx == '4') {
+				//return '<a href="javascript:void(0)" onclick="request('+index+')">提交<//a>';
+				return '<button onclick="request('+index+')">提交</button>';
+			} else if(row.lc_sub_lx == '5') {
+				var param = {
+					batch_no: row.batch_no,
+					lc_id: row.lc_id,
+					lc_sub_id: row.lc_sub_id,
+					operateType: row.relation,
+					rec_id: row.rec_id
+				};
+				return '<a href="'+ $$.serializeUrl(row.url, param)+'" target="_blank">进入审核</a>';
+			}
+		}
+    }
+	
+	function uploadsuccess(file, response) {
+		var $upload = $(this);
+		var row = $('#dg2').datagrid('getSelected');
+		$$.request(row.url, $.extend({}, row, {
+			url: response.serverid,
+			filename: file.name
+		}), function (data) {
+			reload();
+			$$.msg('操作成功');
+		});
+	}
+	
+	function onClickLc(index, row) {
+		var params = {batch_no: row.batch_no, lc_id: row.lc_id};
+		$('#dg2').datagrid({
+            url: $$.wrapUrl('/action/bm/lc-exec-detail-his/search'),
+            pageNumber: 1,
+            queryParams: params,
+            onLoadSuccess: function (data) {
+                $(this).datagrid('clearChecked');
+                //解决滚动条引起的panel宽度问题
+                $(this).datagrid('getPanel').panel('resize');
+				
+				var options = {
+					uploadSuccess: uploadsuccess
+				}
+				initUpload(options);
+            }
+        });
+	}
+
+    var toggleOptions = {
+        options: {
+			view: {
+				url: 'lc-exec-module-detail.html'
+			},
+			edit: {
+				url: 'lc-exec-his-detail.html'
+			}
+        },
+        params: {
+			view: {
+				displayType: 'view'
+			},
+			edit: {
+				displayType: 'edit'
+			}
+		}
+    };
+
+    function formatPriority(value) {
+        var rows = [{
+            'value': '1',
+            'text': '低'
+        }, {
+            'value': '2',
+            'text': '中'
+        }, {
+            'value': '3',
+            'text': '高'
+        }];
+
+        return $$.formatField(rows, value);
+    }
+	
+    $(function () {
+        $('form').on('keyup', function (event) {
+            if (event.keyCode == 13) {
+                $(this).find('button.btn-primary').click();
+            }
+        });
+
+        $('a.easyui-linkbutton[data-toggle]').on('click', function (event) {
+            event.preventDefault();
+            $$.clickToolbar(this, toggleOptions);
+        });
+
+
+        $('#ff').find('button.btn-primary').click();
+		
+    });
+</script>
+</body>
+
+</html>

@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>执行进度</title>
+    <link href="../lib/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="../lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="../lib/webuploader/webuploader.css">
+    <link href="../lib/layer/theme/default/layer.css" rel="stylesheet">
+    <link href="../lib/viewer/viewer.min.css" rel="stylesheet">
+    <link href="../lib/jquery-easyui/themes/bootstrap/easyui.min.css" rel="stylesheet">
+</head>
+
+<body>
+<div class="page">
+    <form id="ff" data-options="onSerialize:$.noop">
+        <table class="table" style="width: 970px;">
+            <!--caption>查询执行记录</caption-->
+            <tr>
+                <td class="text-right col-sm-2">
+                    <label>批次号：</label>
+                </td>
+                <td class="col-sm-4">
+                    <input type="text" name="batch_no">
+                </td>
+                <td class="text-right col-sm-2">
+                    <label>子流程名称：</label>
+                </td>
+                <td class="col-sm-4">
+                    <input type="text" name="lc_sub_name">
+                </td>
+            </tr>
+            <tr>
+               	<td class="text-right col-sm-2">
+                    <label>创建人：</label>
+                </td>
+                <td class="col-sm-4">
+                    <input type="text" name="created_by">
+                </td>
+                <td class="text-right col-sm-2">
+                    <label>创建时间：</label>
+                </td>
+                <td class="col-sm-4">
+                    <input type="text" name="created_time">
+                </td>
+            </tr>
+            <tr>
+               <td class="text-right col-sm-2">
+                    <label>过期时间：</label>
+                </td>
+                <td class="col-sm-4">
+                    <input type="text" name="expire_time">
+                </td>
+                <td class="text-right col-sm-2">
+                    <label>状态：</label>
+                </td>
+                <td class="col-sm-4">
+                    <input type="text" name="lc_sub_zt_nm">
+                </td>
+            </tr>
+            <tr>
+               <td class="text-right col-sm-2">
+                    <label>执行组：</label>
+                </td>
+                <td class="col-sm-4">
+                    <input type="text" name="execute_group_nm">
+                </td>
+                <input class="hidden" type="text" name="lc_sub_zt" id="lc_sub_zt">
+            </tr>
+            <tfoot>
+            <!--tr>
+                <td></td>
+                <td colspan="3">
+                    <button type="button" class="btn btn-primary"
+                            data-options="datagrid:'#dg',url:'/action/bm/lc-exec-his/search'"
+                            onclick="$$.search(this)">查询
+                    </button>
+                    <button type="button" class="btn btn-default btn-outline" onclick="$$.reset(this)">重置</button>
+                </td>
+            </tr-->
+            </tfoot>
+        </table>
+    </form>
+    
+    <table id="dg" class="easyui-datagrid" title="任务记录" data-options="singleSelect:true,pagination:true,rownumbers:true,idField:'rec_id'">
+        <thead>
+        <tr>
+            <th data-options="field:'name',width:180,formatter:formatJl">执行记录</th>
+            <th data-options="field:'created_by',width:150">执行人</th>
+            <th data-options="field:'dq',width:150">地区</th>
+            <th data-options="field:'created_time',width:150">执行时间</th>
+            <th data-options="field:'op',width:80,formatter:formatOp">操作</th>
+        </tr>
+        </thead>
+    </table>
+    
+    <br>
+    <div style="width: 1000px;">
+        <div class="row">
+            <div class="col-sm-2"></div>
+            <div class="col-sm-2"></div>
+            <div class="col-sm-6">
+                <button type="button" class="btn btn-default btn-outline" onclick="$$.close()">关闭</button>
+            </div>
+        </div>
+    </div>
+
+</div>
+    
+</div>
+<script src="../lib/jquery/jquery.min.js"></script>
+<script src="../lib/layer/layer.js"></script>
+<script src="../lib/viewer/viewer.min.js"></script>
+<script src="../lib/My97DatePicker/WdatePicker.js"></script>
+<script src="../lib/jquery-easyui/jquery.easyui.min.js"></script>
+<script src="../lib/webuploader/webuploader.min.js"></script>
+<script src="../js/base.js"></script>
+<script src="../js/st.js"></script>
+<script>
+    var query = $$.parseQueryString();
+    var displayType = query.displayType;
+    var operateType = query.operateType;
+
+    function reload() {
+        $('#dg').datagrid('reload');
+    }
+	
+    function formatJl(value, row) {
+        if (row.system) {
+			var view = '<a href="'+$$.wrapUrl('/action/uploads/'+row.system)+'" target="_blank">'+value+'</a>';
+			if( $.inArray(row.name.substr(row.name.lastIndexOf('.')).toLowerCase(), [".bmp",".jpg",".png",".tiff",".gif",".pcx",".tga",".exif",".fpx",".svg"]) > 0) {
+				$(view).viewer({
+					title: false,
+					navbar: false,
+					zIndex: 9000
+				});
+			}
+            return view;
+        } else {
+			return value;
+		}
+    }
+
+	function FileDelete(index) {
+		var row = $('#dg').datagrid('getRows')[index];
+		$$.confirm('确认要删除文件以及记录？', function () {
+			$$.request('/action/bm/lc-exec-module-detail/delete', row, function (data) {
+				reload();
+				$$.msg('删除成功');
+			});
+		});
+	}
+	
+	function formatOp(value, row, index) {
+		if($('#lc_sub_zt').val() != '3')
+			return '<a href="javascript:void(0)" onclick="FileDelete('+index+')">删除<//a>';
+    }
+	
+    function formatPriority(value) {
+        var rows = [{
+            'value': '1',
+            'text': '低'
+        }, {
+            'value': '2',
+            'text': '中'
+        }, {
+            'value': '3',
+            'text': '高'
+        }];
+
+        return $$.formatField(rows, value);
+    }
+
+	
+	var action = {'edit': [
+		'edit','update'
+	]};
+    $(function () {
+		$$.transform('#ff', displayType, action);
+		$$.loadForm('#ff', '/action/bm/lc-exec-detail-his/view', query);
+		
+		$('#dg').datagrid({
+            url: $$.wrapUrl('/action/bm/lc-exec-module-detail/search'),
+            pageNumber: 1,
+            queryParams: query,
+            onLoadSuccess: function (data) {
+                $(this).datagrid('clearChecked');
+                //解决滚动条引起的panel宽度问题
+                $(this).datagrid('getPanel').panel('resize');
+            }
+        });
+    });
+</script>
+</body>
+
+</html>

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>非税商户导入</title>
+    <link href="../lib/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="../lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <link href="../lib/toastr/toastr.min.css" rel="stylesheet">
+    <link href="../lib/jquery-easyui/themes/bootstrap/easyui.min.css" rel="stylesheet">
+
+</head>
+
+<body>
+<div class="page">
+    <form id="ff" data-options="onSerialize:serializeSearch">
+        <table class="table" style="width: 970px;">
+            <caption>上传文件</caption>
+            <tbody>
+            <tr>
+                <td class="text-right col-sm-2">
+                    <label>上传说明</label>
+                </td>
+                <td class="col-sm-4">
+                    <label>目前只支持excel文件（xls和xlsx）两种格式</label>
+                </td>
+            </tr>
+            <tr>
+                <td class="text-right col-sm-2">
+                    <label>请选择文件</label>
+                </td>
+                <td class="col-sm-4">
+                    <input type="file" name="file">
+                    <input type="hidden" name="serverid">
+                </td>
+            </tr>
+            </tbody>
+            <tfoot>
+            <tr>
+                <td></td>
+                <td colspan="3">
+                    <button type="button" class="btn btn-primary" data-options="url:'/action/bm/import-file/create'"
+                            onclick="$$.submit(this)">上传
+                    </button>
+                    <!-- <button type="button" class="btn btn-success" data-options="datagrid:'#dg',url:'/action/bm/import-file/export'" onclick="$$.exportData(this)">导出</button> -->
+                </td>
+            </tr>
+            </tfoot>
+        </table>
+    </form>
+
+    <table id="dg" class="easyui-datagrid" title="导入任务情况"
+           data-options="singleSelect:true,pagination:true,rownumbers:true,toolbar:'#tb',idField:'rec_id'">
+        <thead>
+        <tr>
+            <th data-options="field:'rec_id',width:120">任务名称</th>
+            <th data-options="field:'file_type_nm',width:120">导入文件名</th>
+            <th data-options="field:'filename',width:300">导入时间</th>
+            <th data-options="field:'created_by',width:100">导入人</th>
+            <th data-options="field:'created_time',width:150">任务状态</th>
+            <th data-options="field:'proc_st_nm',width:100">完成时间</th>
+            <th data-options="field:'remark',width:150">导入总数</th>
+            <th data-options="field:'remark',width:150">成功条数</th>
+            <th data-options="field:'remark',width:150">失败条数</th>
+            <th data-options="field:'remark',width:150">日志文件</th>
+        </tr>
+        </thead>
+    </table>
+</div>
+<script src="../lib/jquery/jquery.min.js"></script>
+<script src="../lib/jquery-iframe-transport/jquery.iframe-transport.js"></script>
+<script src="../lib/toastr/toastr.min.js"></script>
+<script src="../lib/jquery-easyui/jquery.easyui.min.js"></script>
+<script src="../js/base.js"></script>
+<script src="../js/st.js"></script>
+<script src="../js/param.js"></script>
+<!-- <script src="../js/district.js"></script> -->
+<script>
+    var query = $$.parseQueryString();
+    var displayType = query.displayType;
+    var operateType = query.operateType;
+
+    function formatOp(value, row, index) {
+        var operate = '';
+        if (row.proc_st == '1') {
+            operate += '<a href="#" class="btn" onclick="onImport(' + index + ')">导入</a>';
+        }
+
+        if (row.result_url) {
+            operate += '<a href="' + $$.wrapUrl(row.result_url) + '" class="btn">下载</a>';
+        }
+        return operate;
+    }
+
+    function onImport(index) {
+        var row = $$.datagrid('#list', 'getRows')[index];
+        $$.request('/action/bm/import-file/import', row, function (data) {
+            $$.msg('操作成功', {
+                icon: 1
+            });
+
+            if (data.url) {
+                var index = layer.open({
+                    type: 2,
+                    title: false,
+                    content: $$.wrapUrl(data.url)
+                });
+
+                layer.close(index);
+            }
+
+            $('#search-btn').click();
+        });
+    }
+
+
+    function initUpload() {
+
+        $('#ff').find(':file').on('change', function () {
+            var $file = $(this);
+            if (!$file.val()) return;
+
+            $.mask.show();
+            $.ajax({
+                type: 'POST',
+                url: $$.wrapUrl('/action/upload'),
+                files: $(this),
+                iframe: true,
+                // dataType: 'json',
+                success: function (data) {
+                    var result = $(data).not('style').text();
+                    try {
+                        result = $.parseJSON(result)
+                    } catch (e) {
+                        console.log(result);
+                        console.error(e);
+                        $$.msg('解析JSON异常');
+                        return;
+                    }
+
+                    if ($$.errcode(result) == 0) {
+                        $file.parent().find('input[name=serverid]').val(result.serverid);
+                    } else {
+                        $$.msg($$.errmsg(result));
+                    }
+                }
+            }).always(function () {
+                $.mask.hide();
+            });
+
+            setTimeout(function () {
+                $file.val('');
+            }, 150);
+        });
+    }
+
+    $(function () {
+        initUpload();
+    });
+</script>
+</body>
+
+</html>

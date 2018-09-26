@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>创新计提比例</title>
+    <link href="../lib/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="../lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../lib/layer/theme/default/layer.css" rel="stylesheet">
+    <link href="../lib/jquery-easyui/themes/bootstrap/easyui.min.css" rel="stylesheet">
+
+</head>
+
+<body>
+<div class="page">
+    <form id="ff" data-options="onSerialize:$.noop">
+        <table class="table" style="width: 970px;">
+            <caption>查询计提比例</caption>
+            <tbody>
+            <tr>
+                <td class="text-right col-sm-2">
+                    <label>地级市</label></td>
+                <td class="col-sm-4">
+                    <div class="col-sm-12" style="padding:0;">
+                        <input type="text" id="dq" name="dq" class="easyui-combobox">
+                    </div>
+                </td>
+            	<td class="text-right col-sm-2">
+                    <label>业务类型</label></td>
+                <td class="col-sm-4">
+                    <div class="col-sm-12" style="padding:0;">
+                        <input type="text" id="ywlx" name="ywlx" class="easyui-combobox" data-options="panelHeight:'auto'">
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+
+            <tfoot>
+            <tr>
+                <td></td>
+                <td></td>
+                <td colspan="3">
+                    <button type="button" class="btn btn-primary" onclick="$$.search(this)"
+                            data-options="datagrid:'#dg',url:'/action/bm/cxjc-jtbl/search'">
+                        查询
+                    </button>
+                    <button type="button" class="btn btn-default btn-outline" onclick="$$.reset(this)">重置</button>
+                </td>
+            </tr>
+            </tfoot>
+        </table>
+    </form>
+    <div id="tb">
+        <a href="#" class="easyui-linkbutton" onclick="onClickEditBl()" data-options="iconCls:'fa fa-bars',plain:true">编辑</a>
+    </div>
+    <table id="dg" class="easyui-datagrid" title="查询结果"
+           data-options="singleSelect:true,pagination:true,rownumbers:true,toolbar:'#tb',idField:'rec_id'">
+        <thead>
+        <tr>
+            <!--th data-options="field:'chk',checkbox:true"></th-->
+            <th data-options="field:'ywlx',width:120">业务类型</th>
+            <th data-options="field:'dq',width:80">地区</th>
+            <th data-options="field:'qz_nm',width:130">阀值</th>
+            <th data-options="field:'cs1',width:80">参数1</th>
+            <th data-options="field:'cs2',width:80">参数2</th>
+            <th data-options="field:'bllx_nm',width:150">比例类型</th>
+            <th data-options="field:'bl',width:80">分配值</th>
+            <th data-options="field:'bz',width:150">备注</th>
+        </tr>
+        </thead>
+    </table>
+</div>
+
+<div id="dd" class="easyui-dialog" title="修改参数" style="width:860px;height:400px;" data-options="resizable:true,modal:true,closed:true">
+    <form id="ff2" data-options="onSerialize:$.noop">
+        <table class="table" style="width: 800px;">
+            <tbody>
+              <tr>
+                <td class="text-right col-sm-2">
+                    <label>ID</label></td>
+                <td class="col-sm-4">
+                    <div class="col-sm-12" style="padding:0;">
+                        <input type="text" name="rec_id" class="easyui-validatebox" readonly>
+                    </div>
+                </td>
+                <td class="text-right col-sm-2">
+                    <label>业务类型</label></td>
+                <td class="col-sm-4">
+                    <div class="col-sm-12" style="padding:0;">
+                        <input type="text" name="ywlx" class="easyui-validatebox" readonly>
+                    </div>
+                </td>
+              </tr>
+              <tr>
+                <td class="text-right col-sm-2">
+                    <label>地级市</label></td>
+                <td class="col-sm-4">
+                    <div class="col-sm-12" style="padding:0;">
+                        <input type="text" name="dq" class="easyui-validatebox" readonly>
+                    </div>
+                </td>
+                <td class="text-right col-sm-2">
+                    <label>阀值</label></td>
+                <td class="col-sm-4">
+                    <div class="col-sm-12" style="padding:0;">
+                        <input type="text" name="qz_nm" class="easyui-validatebox" readonly>
+                    </div>
+                </td>
+             </tr> 
+             <tr>
+                <td class="text-right col-sm-2">
+                    <label>参数1</label></td>
+                <td class="col-sm-4">
+                    <div class="col-sm-12" style="padding:0;">
+                        <input type="text" name="cs1" class="easyui-validatebox" data-options="">
+                    </div>
+                </td>
+            	<td class="text-right col-sm-2">
+                    <label>参数2</label></td>
+                <td class="col-sm-4">
+                    <div class="col-sm-12" style="padding:0;">
+                        <input type="text" name="cs2" class="easyui-validatebox" data-options="">
+                    </div>
+                </td>
+              </tr> 
+              <tr>
+             	<td class="text-right col-sm-2">
+                    <label>分配类型</label></td>
+                <td class="col-sm-4">
+                    <div class="col-sm-12" style="padding:0;">
+                        <input type="text" id="bllx" name="bllx" class="easyui-combobox" data-options="panelHeight:'auto'">
+                    </div>
+                </td>
+            	<td class="text-right col-sm-2">
+                    <label>分配值</label></td>
+                <td class="col-sm-4">
+                    <div class="col-sm-12" style="padding:0;">
+                        <input type="text" name="bl" class="easyui-validatebox" data-options="">
+                    </div>
+                </td>
+              </tr>
+              <tr>
+             	<td class="text-right col-sm-2">
+                    <label>备注</label></td>
+                <td class="col-sm-4">
+                    <div class="col-sm-12" style="padding:0;">
+                        <input type="text" name="bz" class="easyui-validatebox" data-options="">
+                    </div>
+                </td>
+                <td></td>
+              </tr>
+            </tbody>
+
+            <tfoot>
+            <tr>
+                <td></td>
+                <td></td>
+                <td colspan="3">
+                    <button type="button" class="btn btn-primary" onclick="$$.submit(this)"
+                            data-options="url:'/action/bm/cxjc-jtbl/update',onSuccess:onSubmit">
+                        编辑提交
+                    </button>
+                </td>
+            </tr>
+            </tfoot>
+        </table>
+    </form>
+</div>
+
+<script src="../lib/jquery/jquery.min.js"></script>
+<script src="../lib/layer/layer.js"></script>
+<script src="../lib/My97DatePicker/WdatePicker.js"></script>
+<script src="../lib/jquery-easyui/jquery.easyui.min.js"></script>
+<script src="../js/base.js"></script>
+<script src="../js/st.js"></script>
+<script src="../js/param.js"></script>
+<script src="../js/district.js"></script>
+<script>
+    var query = $$.parseQueryString();
+    var displayType = query.displayType;
+    var operateType = query.operateType;
+
+    function reload() {
+        $('#dg').datagrid('reload');
+    }
+	
+	function onChangeCity() {
+        var value = $(this).val();
+        $$.request('/action/bm/parameter/list', {
+			'tzr': '1',
+            'dq': value
+        }, function (data) {
+            $('#tzr').combobox('loadData',data.tzr);
+        });
+    }
+	
+	function onSubmit() {
+		$$.msg('操作成功');
+		$('#dd').dialog('close');
+		reload();
+	}
+	
+	function onClickEditBl(){
+		var row = $('#dg').datagrid('getSelected');
+        if (row === null) {
+            $$.msg('请选择记录！');
+            return false;
+        } 
+		$('#dd').dialog('open');
+		
+        $$.loadForm('#ff2', '/action/bm/cxjc-jtbl/view', row);
+	}
+	
+    $(function () {
+        $('form').on('keyup', function (event) {
+            if (event.keyCode == 13) {
+                $(this).find('button.btn-primary').click();
+            }
+        });
+		
+		$$.request('/action/bm/parameter/list', {'dq': '1'}, function (data) {
+            $('#dq').combobox('loadData', data.dq);
+        });
+		
+		$$.request('/action/bm/parameter/list', {'ywlx': '1'}, function (data) {
+            $('#ywlx').combobox('loadData', data.ywlx);
+        });
+		
+		$$.request('/action/bm/parameter/list', {'bllx': '1'}, function (data) {
+            $('#bllx').combobox('loadData', data.bllx);
+        });
+		
+        $('#ff').find('button.btn-primary').click();
+    });
+</script>
+</body>
+
+</html>
