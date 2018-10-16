@@ -461,7 +461,7 @@ window.$$ = (function () {
                 }
             }
 
-            $target.find('.tf-' + action).removeClass('hide');
+            $target.find('.tf-' + action).removeClass('hide').each(removereadonly);
         }
 
         function readonly(index, element) {
@@ -479,6 +479,24 @@ window.$$ = (function () {
                 $tmp.attr('disabled', 'disabled');
             } else {
                 $tmp.attr('readonly', 'readonly');
+            }
+        }
+		
+		function removereadonly(index, element) {
+            var $tmp = $(element);
+
+            if ($tmp.hasClass('textbox-f')) {
+                $tmp.textbox('textbox').css('background-color', '');
+            }
+
+            if ($tmp.hasClass('combobox-f')) {
+                $tmp.combobox('readonly', false);
+            } else if ($tmp.hasClass('combotree-f')) {
+                $tmp.combotree('readonly', false);
+            } else if (element.tagName == 'SELECT' || (element.tagName == 'INPUT' && $.inArray(element.type, ['checkbox', 'file']) >= 0) || $tmp.hasClass('Wdate')) {
+                $tmp.attr('disabled', false);
+            } else {
+                $tmp.attr('readonly', false);
             }
         }
     };
