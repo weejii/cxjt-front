@@ -461,7 +461,8 @@ window.$$ = (function () {
                 }
             }
 
-            $target.find('.tf-' + action).removeClass('hide').each(removereadonly);
+            $target.find('.tf-' + action).removeClass('hide');
+			$target.find('input,textarea,select').each(removereadonly);
         }
 
         function readonly(index, element) {
