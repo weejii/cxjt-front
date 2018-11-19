@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>非税地区明细</title>
+    <link href="../lib/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="../lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <link href="../lib/layer/theme/default/layer.css" rel="stylesheet">
+    <link href="../lib/jquery-easyui/themes/bootstrap/easyui.min.css" rel="stylesheet">
+
+</head>
+
+<body>
+<div class="page">
+    <form id="ff" data-options="onSerialize:$.noop">
+        <table class="table" style="width: 970px;">
+            <caption>查询非税地区</caption>
+            <tbody>
+            <tr>
+            	<td class="text-right col-sm-2">
+					<label>地区</label></td>
+				<td class="col-sm-4">
+					<div class="col-sm-12" style="padding:0;">
+						<input type="text" id="citycode" name="citycode" class="easyui-combobox">
+					</div>
+				</td>
+            </tr>
+
+            </tbody>
+
+            <tfoot>
+            <tr>
+                <td></td>
+                <td></td>
+                <td colspan="3">
+                    <button type="button" class="btn btn-primary" onclick="$$.search(this)"
+                            data-options="datagrid:'#dg',url:'/action/bm/fs-area/search'">
+                        查询
+                    </button>
+                    <button type="button" class="btn btn-default btn-outline" onclick="$$.reset(this)">重置</button>
+                    <!--button type="button" class="btn btn-success" onclick="$$.exportData(this)"
+                            data-options="datagrid:'#dg',url:'/action/bm/cxjc-cp-report/export'">
+                        导出
+                    </button-->
+                    <!--a href="fs-n-backlist.html" class="pull-right" style="font-size: 1.2em;">黑名单管理</a-->
+                </td>
+            </tr>
+            </tfoot>
+        </table>
+    </form>
+    <table id="dg" class="easyui-datagrid" title="查询结果"
+           data-options="singleSelect:true,pagination:true,rownumbers:true,toolbar:'#tb'">
+        <thead>
+        <tr>
+            <!--th data-options="field:'chk',checkbox:true"></th-->
+            <th data-options="field:'areacode'">行政地区码</th>
+            <th data-options="field:'areaname'">行政区名称</th>
+            <th data-options="field:'fscode'">对账目录代码</th>
+            <th data-options="field:'czdm'">非税财政内码</th>
+			<th data-options="field:'cityname'">地市</th>
+        </tr>
+        </thead>
+    </table>
+</div>
+<script src="../lib/jquery/jquery.min.js"></script>
+<script src="../lib/layer/layer.js"></script>
+<script src="../lib/My97DatePicker/WdatePicker.js"></script>
+<script src="../lib/jquery-easyui/jquery.easyui.min.js"></script>
+<script src="../js/base.js"></script>
+<script src="../js/st.js"></script>
+<script src="../js/param.js"></script>
+<script src="../js/district.js"></script>
+<script>
+    var query = $$.parseQueryString();
+    var displayType = query.displayType;
+    var operateType = query.operateType;
+
+    function reload() {
+        $('#dg').datagrid('reload');
+    }
+
+	
+    $(function () {
+        $('form').on('keyup', function (event) {
+            if (event.keyCode == 13) {
+                $(this).find('button.btn-primary').click();
+            }
+        });
+		
+		$$.request('/action/bm/parameter/list', {'citycode': '1'}, function (data) {
+            $('#citycode').combobox('loadData', data.city);
+        });
+		
+        $('#ff').find('button.btn-primary').click();
+    });
+</script>
+</body>
+
+</html>

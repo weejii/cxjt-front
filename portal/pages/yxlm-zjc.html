@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>营销联盟资金池</title>
+    <link href="../lib/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="../lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="../lib/webuploader/webuploader.css">
+    <link href="../lib/layer/theme/default/layer.css" rel="stylesheet">
+    <link href="../lib/viewer/viewer.min.css" rel="stylesheet">
+    <link href="../lib/jquery-easyui/themes/bootstrap/easyui.min.css" rel="stylesheet">
+
+	<style>
+		button {
+			border：none;
+			position: relative;
+			padding: 10px 10px;
+			border-radius: 3px;
+			width: 78px; 
+			height: 30px; 
+			background: #00b7ee; 
+			color: #fff; 
+			overflow: hidden;
+		}
+	</style>
+</head>
+
+<body>
+<div class="page">
+    <form id="ff" data-options="onSerialize:$.noop">
+        <table class="table" style="width: 970px;">
+            <caption>查询资金池</caption>
+            <tr>
+                <td class="text-right col-sm-2">
+                    <label>资金池编码：</label>
+                </td>
+                <td class="col-sm-4">
+                    <input type="text" name="zjcbm">
+                </td>
+                <td class="text-right col-sm-2">
+                    <label>资金池名称：</label>
+                </td>
+                <td class="col-sm-4">
+                    <input type="text" name="zjcmc">
+                </td>
+            </tr>
+            <tfoot>
+            <tr>
+                <td></td>
+                <td></td>
+                <td colspan="3">
+                    <button type="button" class="btn btn-primary"
+                            data-options="datagrid:'#dg',url:'/action/bm/yxlm-zjc/search'"
+                            onclick="$$.search(this)">查询
+                    </button>
+                    <button type="button" class="btn btn-default btn-outline" onclick="$$.reset(this)">重置</button>
+                    <button type="button" class="btn btn-success" onclick="$$.exportData(this)" data-options="datagrid:'#dg',url:'/action/bm/yxlm-zjc/export'">导出</button>
+                </td>
+                <td>
+                    
+                </td>
+            </tr>
+            </tfoot>
+        </table>
+    </form>
+    
+    <div id="tb">
+       	<a href="javascript:void(0)" name="file">上传附件</a>
+    </div>
+    <table id="dg" class="easyui-datagrid" title="任务记录" data-options="singleSelect:true,pagination:true,rownumbers:true,toolbar:'#tb'">
+        <thead>
+        <tr>
+            <th data-options="field:'zhgxsj'">最后更新时间</th>
+            <th data-options="field:'cjsj'">创建时间</th>
+            <th data-options="field:'zjcbm'">资金池编码</th>
+            <th data-options="field:'zjcmc'">资金池名称</th>
+            <th data-options="field:'ssjg'">所属机构</th>
+            <th data-options="field:'fzjg'">分支机构</th>
+            <th data-options="field:'ywb'">业务部</th>
+            <th data-options="field:'ywlx'">业务类型</th>
+            <th data-options="field:'zzje'">总账金额</th>
+            <th data-options="field:'ysyje'">已使用金额</th>
+            <th data-options="field:'syje'">剩余金额</th>
+            <th data-options="field:'zt'">状态</th>
+            <th data-options="field:'yjzt'">预警状态</th>
+            <th data-options="field:'yjz'">预警值</th>
+        </tr>
+        </thead>
+    </table>
+</div>
+    
+<script src="../lib/jquery/jquery.min.js"></script>
+<script src="../lib/layer/layer.js"></script>
+<script src="../lib/My97DatePicker/WdatePicker.js"></script>
+<script src="../lib/jquery-easyui/jquery.easyui.min.js"></script>
+<script src="../lib/webuploader/webuploader.min.js"></script>
+<script src="../js/base.js"></script>
+<script src="../js/st.js"></script>
+<script>
+    var query = $$.parseQueryString();
+    var displayType = query.displayType;
+    var operateType = query.operateType;
+
+    function reload() {
+        $('#dg').datagrid('reload');
+    }
+
+    function initUpload(options) {
+		
+        options = $.extend({
+            accept: null,
+            beforeFileQueued: $.noop,
+            uploadSuccess: $.noop,
+        }, options || {});
+
+        var uploader = WebUploader.create({
+            auto: true,
+            swf: 'lib/webuploader/Uploader.swf',
+            server: $$.wrapUrl('/action/upload'),
+            pick: 'a[name="file"]',
+			threads: 1,
+			timeout: 3*60*100,
+			fileNumLimit:1,
+			fileSingleSizeLimit: 15*1024*1024/*,
+            accept: {
+				title: 'file',
+				extensions: 'xls,xlsx',
+				mimeTypes: 'application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+			}*/
+        })
+		
+		
+        var element;
+		
+        $('a[name="file"]').on('click', function (event) {
+            // set $upload
+            //element = this;
+            uploader.reset();
+        });
+		
+		/*
+        uploader.on('beforeFileQueued', function (file) {
+            return options.beforeFileQueued.call(element, file)
+        });
+		
+        uploader.on('fileQueued', function (file) {
+			alert('fileQueued');
+        });
+		
+		uploader.on('uploadProgress', function( file, percentage ) {
+			alert('uploadProgress');
+		});
+		*/
+        uploader.on('uploadSuccess', function (file, response) {
+            options.uploadSuccess.call(element, file, response);
+        });
+
+        uploader.on('uploadError', function (file, reason) {
+            $$.msg(reason);
+        });
+
+        uploader.on('uploadComplete', function (file) {
+			
+        });
+
+        uploader.on('error', function (type) {
+            if (type=="Q_TYPE_DENIED"){
+				$$.msg("请上传XLS、XLSX格式文件");
+			} else if(type=="F_EXCEED_SIZE"){
+				$$.msg("文件大小不能超过15M");
+			}
+        });
+    }
+	
+	function uploadsuccess(file, response) {
+		var $upload = $(this);
+		$$.request('/action/bm/yxlm-zjc/upload', {
+			url: response.serverid,
+			filename: file.name
+		}, function (data) {
+			reload();
+			$$.msg('操作成功');
+		});
+	}
+
+    $(function () {
+		var options = {
+			uploadSuccess: uploadsuccess
+		}
+		initUpload(options);
+		
+        $('form').on('keyup', function (event) {
+            if (event.keyCode == 13) {
+                $(this).find('button.btn-primary').click();
+            }
+        });
+
+        $('a.easyui-linkbutton[data-toggle]').on('click', function (event) {
+            event.preventDefault();
+            $$.clickToolbar(this, toggleOptions);
+        });
+
+
+        $('#ff').find('button.btn-primary').click();
+		
+    });
+</script>
+</body>
+
+</html>

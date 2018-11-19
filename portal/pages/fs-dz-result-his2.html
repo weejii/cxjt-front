@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>对账信息查询</title>
+    <link href="../lib/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="../lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../lib/layer/theme/default/layer.css" rel="stylesheet">
+    <link href="../lib/viewer/viewer.min.css" rel="stylesheet">
+    <link href="../lib/jquery-easyui/themes/bootstrap/easyui.min.css" rel="stylesheet">
+</head>
+
+<body>
+<div class="page">
+    <form id="ff" data-options="onSerialize:serializeSearch">
+        <table class="table" style="width: 970px;">
+            <caption>查询条件</caption>
+            <tbody>
+				<tr>
+					<td class="text-right col-sm-2">
+						<label>清算日期</label>
+						<span style="color: red;">*</span>
+					</td>
+					<td class="col-sm-4">
+						<input id="settledate" type="text" class="Wdate" name="settledate" style="width: 120px;"
+							   onfocus="WdatePicker({onpicked:function(){$dp.$('settledate2').focus();},maxDate:'#F{$dp.$D(\'settledate2\')}'})" data-options="required:true">
+						<input id="settledate2" type="text" class="Wdate" name="settledate2" style="width: 120px;"
+							   onfocus="WdatePicker({minDate:'#F{$dp.$D(\'settledate\')}'})">
+					</td>
+					<td class="text-right col-sm-2">
+						<label>交易类型</label></td>
+					<td class="col-sm-4">
+						<div class="col-sm-12" style="padding: 0">
+							<input id="trans_chnl" class="easyui-combobox" name="jylx"
+								   data-options="multiple:true,valueField:'value',textField:'text'"/>
+						</div>
+					</td>
+				</tr>
+
+				<tr>
+					<td class="text-right col-sm-2">
+						<label>商户号</label></td>
+					<td class="col-sm-4">
+						<input type="text" name="mchtid" class="easyui-validatebox" data-options="">
+					</td>
+					<td class="text-right col-sm-2">
+						<label>非税地区</label></td>
+					<td class="col-sm-4">
+						<div class="col-sm-12" style="padding: 0">
+							<input type="text" id="fscode" name="fscode" class="easyui-combobox"
+								   data-options="multiple:true,valueField:'fscode',textField:'fsname'">
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td class="text-right col-sm-2">
+						<label>卡号/订单号</label></td>
+					<td class="col-sm-4">
+						<input type="text" name="cardno" class="easyui-validatebox" data-options="">
+					</td>
+					<td class="text-right col-sm-2">
+						<label>参考号</label></td>
+					<td class="col-sm-4">
+						<input type="text" name="refnbr" class="easyui-validatebox" data-options="">
+					</td>
+				</tr>
+            </tbody>
+            <tfoot>
+            <tr>
+                <td></td>
+                <td colspan="3">
+                    <button type="button" class="btn btn-primary"
+                            data-options="datagrid:'#dg',url:'/action/bm/fs-dz-result-his/search'"
+                            onclick="$$.search(this)">查询
+                    </button>
+                    <button type="button" class="btn btn-default btn-outline" onclick="$$.reset(this)">重置</button>
+                </td>
+            </tr>
+            </tfoot>
+        </table>
+    </form>
+	<tr>
+		<p></p>
+	</tr>
+    <table id="dg" class="easyui-datagrid" title="查询结果"
+           data-options="singleSelect:true,pagination:true,rownumbers:true,collapsible:true">
+        <thead>
+        <tr>
+            <th data-options="field:'settledate'">清算日期</th>
+            <th data-options="field:'jylx'">交易类型</th>
+            <th data-options="field:'transtime'">交易时间</th>
+            <th data-options="field:'mchtname'">商户名</th>
+            <th data-options="field:'fscode'">非税地区码</th>
+            <th data-options="field:'fs_ins_id'">执收单位</th>
+            <th data-options="field:'mchtid'">商户号</th>
+            <th data-options="field:'termid'">终端号</th>
+            <th data-options="field:'refnbr'">系统参考号</th>
+            <th data-options="field:'fee_type'">计费类型</th>
+            <th data-options="field:'amount',formatter:formatAmount">交易金额</th>
+            <th data-options="field:'trans_fee'">交易手续费</th>
+        </tr>
+        </thead>
+    </table>
+</div>
+
+<script src="../lib/jquery/jquery.min.js"></script>
+<script src="../lib/layer/layer.js"></script>
+<script src="../lib/My97DatePicker/WdatePicker.js"></script>
+<script src="../lib/jquery-easyui/jquery.easyui.min.js"></script>
+<script src="../js/base.js"></script>
+<script>
+    var query = $$.parseQueryString();
+    var displayType = query.displayType;
+    var operateType = query.operateType;
+
+    var params = {
+        
+    }
+
+    function serializeSearch(data) {
+
+    }
+
+    function formatAmount(value) {
+        return value / 100;
+    }
+
+    $(function () {
+        $$.request('/action/bm/d-fscode/list', {}, function (data) {
+            $('#fscode').combobox('loadData', data.rows);
+        });
+		
+		$$.request('/action/bm/parameter/list', {jylx: '1'}, function (data) {
+            $('#jylx').combobox('loadData', data.jylx);
+        });
+		/*
+        $$.request('/action/bm/d-fs-inst/list', {}, function (data) {
+            $('#fs_ins_id').combobox('loadData', data.rows);
+        }); */
+    });
+</script>
+</body>
+
+</html>

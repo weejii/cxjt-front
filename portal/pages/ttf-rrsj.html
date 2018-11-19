@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>天天富台账</title>
+    <link href="../lib/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="../lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../lib/layer/theme/default/layer.css" rel="stylesheet">
+    <link href="../lib/viewer/viewer.min.css" rel="stylesheet">
+    <link href="../lib/jquery-easyui/themes/bootstrap/easyui.min.css" rel="stylesheet">
+</head>
+
+<body>
+<div id="tt" class="easyui-tabs" data-options="fit:true,border:false,tabHeight:36,onSelect:onSelectTab"
+     style="overflow:hidden;">
+    <div title="日日生金">
+		<div class="page">
+			<form id="ff" data-options="onSerialize:$.noop">
+				<table class="table" style="width: 970px;">
+					<caption>查询日日生金</caption>
+					<tr>
+						<td class="text-right col-sm-2">
+							<label>被推荐用户姓名：</label>
+						</td>
+						<td class="col-sm-4">
+							<input type="text" name="btjyhh">
+						</td>
+						<td class="text-right col-sm-2">
+							<label>推荐人</label></td>
+						<td class="col-sm-4">
+							<div class="col-sm-12" style="padding:0;">
+								<input type="text" id="tzr" name="tzr" class="easyui-combobox">
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td class="text-right col-sm-2">
+							<label>推荐人手机号：</label>
+						</td>
+						<td class="col-sm-4">
+							<input type="text" name="tjrsjh">
+						</td>
+						<td class="text-right col-sm-2">
+							<label>记录时间：</label>
+						</td>
+						<td class="col-sm-4">
+							<input id="lrsj1" type="text" class="Wdate" name="lrsj1" style="width: 120px;" onfocus="WdatePicker({onpicked:function(){$dp.$('lrsj2').focus();},maxDate:'#F{$dp.$D(\'lrsj2\')}'})">
+							<input id="lrsj2" type="text" class="Wdate" name="lrsj2" style="width: 120px;" onfocus="WdatePicker({minDate:'#F{$dp.$D(\'lrsj1\')}'})">
+						</td>
+					</tr>
+					<tfoot>
+					<tr>
+						<td></td>
+						<td align="right">
+							<button type="button" class="btn btn-primary"
+									data-options="datagrid:'#dg',url:'/action/bm/ttf-rrsj-detail-his/search'"
+									onclick="$$.search(this)">查询
+							</button>
+						</td>
+						<td align="left">
+							<button type="button" class="btn btn-default btn-outline" onclick="$$.reset(this)">重置</button>
+						</td>
+						<td></td>
+					</tr>
+					</tfoot>
+				</table>
+			</form>
+    
+			<div id="tb">
+		    	<a href="#" class="easyui-linkbutton" onclick="onClickOpenDlg(this, 'view')" data-options="iconCls:'fa fa-bars',plain:true">查看详情</a>
+			    <a href="#" class="easyui-linkbutton" onclick="onClickOpenDlg(this, 'create')" data-options="iconCls:'fa fa-bars',plain:true">新增</a>
+				<a href="#" class="easyui-linkbutton" onclick="onClickOpenDlg(this, 'update')" data-options="iconCls:'fa fa-bars',plain:true">编辑</a>
+			</div>
+			<table id="dg" class="easyui-datagrid" title="查询记录" data-options="singleSelect:true,pagination:true,rownumbers:true,toolbar:'#tb',idField:'rec_id'">
+				<thead>
+				<tr>
+					<th data-options="field:'tjrsjh'">推荐人手机号</th>
+					<th data-options="field:'btjyhh'">被推荐用户号</th>
+					<th data-options="field:'btjyhxm'">被推荐用户姓名</th>
+					<th data-options="field:'rjbyl'">日均保有量</th>
+					<th data-options="field:'tzr'">推荐人</th>
+					<th data-options="field:'sdsy'">分公司收益(元)</th>
+					<th data-options="field:'syjt'">客户经理提成(元)</th>
+					<th data-options="field:'lrsj'">记录时间</th>
+					<th data-options="field:'settle_mon'">计提月份</th>
+				</tr>
+				</thead>
+			</table>
+		</div>
+	</div>
+    <div title="消费贷提钱花" data-options="bodyCls:'tab-body-overflow'">
+        <iframe src="javascript:void(0)" frameborder="0" width="100%" height="100%"
+                style="width:100%; height:100%; border: 0; overflow: hidden;"
+                onload="this.height='100%';"></iframe>
+    </div>
+    <div title="流水贷亚联财" data-options="bodyCls:'tab-body-overflow'">
+        <iframe src="javascript:void(0)" frameborder="0" width="100%" height="100%"
+                style="width:100%; height:100%; border: 0; overflow: hidden;"
+                onload="this.height='100%';"></iframe>
+    </div>
+    <div title="流水贷万商贷" data-options="bodyCls:'tab-body-overflow'">
+        <iframe src="javascript:void(0)" frameborder="0" width="100%" height="100%"
+                style="width:100%; height:100%; border: 0; overflow: hidden;"
+                onload="this.height='100%';"></iframe>
+    </div>
+    <div title="平安优房贷" data-options="bodyCls:'tab-body-overflow'">
+        <iframe src="javascript:void(0)" frameborder="0" width="100%" height="100%"
+                style="width:100%; height:100%; border: 0; overflow: hidden;"
+                onload="this.height='100%';"></iframe>
+    </div>
+    <div title="平安宅E贷" data-options="bodyCls:'tab-body-overflow'">
+        <iframe src="javascript:void(0)" frameborder="0" width="100%" height="100%"
+                style="width:100%; height:100%; border: 0; overflow: hidden;"
+                onload="this.height='100%';"></iframe>
+    </div>
+    <div title="流水贷小天鹅" data-options="bodyCls:'tab-body-overflow'">
+        <iframe src="javascript:void(0)" frameborder="0" width="100%" height="100%"
+                style="width:100%; height:100%; border: 0; overflow: hidden;"
+                onload="this.height='100%';"></iframe>
+    </div>
+    <div title="天天存" data-options="bodyCls:'tab-body-overflow'">
+        <iframe src="javascript:void(0)" frameborder="0" width="100%" height="100%"
+                style="width:100%; height:100%; border: 0; overflow: hidden;"
+                onload="this.height='100%';"></iframe>
+    </div>
+</div>
+
+<div id="dd" class="easyui-dialog dlg" title="修改参数" style="width:860px;height:400px;" data-options="resizable:true,modal:true,closed:true">
+    <form id="ff2" data-options="onSerialize:$.noop">
+        <table class="table" style="width: 800px;">
+            <tbody>
+				<tr>
+					<input type="text" class="hidden" name="rec_id">
+				</tr>
+				<tr class="tf tf-create tf-update">
+					<td class="text-right col-sm-2">
+						<label>推荐人手机号</label></td>
+					<td class="col-sm-4">
+						<input type="number" name="tjrsjh">
+					</td>
+					<td class="text-right col-sm-2">
+						<label>推荐人</label></td>
+					<td class="col-sm-4">
+						<div class="col-sm-12" style="padding:0;">
+							<input type="text" id="dtzr" name="tzr" class="easyui-combobox">
+						</div>
+					</td>
+				</tr>
+				<tr class="tf tf-create tf-update">
+					<td class="text-right col-sm-2">
+						<label>被推荐用户号</label></td>
+					<td class="col-sm-4">
+						<input type="text" name="btjyhh">
+					</td>
+					<td class="text-right col-sm-2">
+						<label>被推荐用户姓名</label></td>
+					<td class="col-sm-4">
+						<input type="text" name="btjyhxm">
+					</td>
+				</tr>
+				<tr class="tf tf-create tf-update">
+					<td class="text-right col-sm-2">
+						<label>日均保有量</label></td>
+					<td class="col-sm-4">
+						<input type="number" name="rjbyl" onblur="CalcSY(this)" class="easyui-validatebox" data-options="required:true">
+					</td>
+					<td class="text-right col-sm-2">
+						<label>计提方式</label></td>
+					<td class="col-sm-4">
+						<input type="text" name="bz" disabled>
+					</td>
+				</tr>
+				<tr>
+					<td class="text-right col-sm-2">
+						<label>分公司收益(元)</label></td>
+					<td class="col-sm-4">
+						<input type="number" name="sdsy" class="easyui-validatebox" data-options="required:true" disabled>
+					</td>
+					<td class="text-right col-sm-2">
+						<label>客户经理计提(元)</label></td>
+					<td class="col-sm-4">
+						<input type="number" name="syjt" class="easyui-validatebox" data-options="required:true" disabled>
+					</td>
+				</tr>
+				<tr class="tf">
+					<td class="text-right col-sm-2">
+						<label>录入人</label></td>
+					<td class="col-sm-4">
+						<input type="text" name="lrr" class="easyui-validatebox" data-options="">
+					</td>
+					<td class="text-right col-sm-2">
+						<label>录入时间</label></td>
+					<td class="col-sm-4">
+						<input type="text" name="lrsj" class="easyui-validatebox" data-options="">
+					</td>
+				</tr>
+            </tbody>
+
+            <tfoot>
+            <tr>
+                <td></td>
+                <td></td>
+                <td>
+                    <button type="button" class="btn btn-primary tf tf-create" onclick="$$.submit(this)"
+                            data-options="url:'/action/bm/ttf-rrsj-detail-his/create',onSuccess:onSubmit,onBefore:onBeforeCommit">
+                        新增提交
+                    </button>
+                    <button type="button" class="btn btn-primary tf tf-update" onclick="$$.submit(this)"
+                            data-options="url:'/action/bm/ttf-rrsj-detail-his/update',onSuccess:onSubmit,onBefore:onBeforeCommit">
+                        编辑提交
+                    </button>
+                </td>
+            </tr>
+            </tfoot>
+        </table>
+    </form>
+</div>
+
+<script src="../lib/jquery/jquery.min.js"></script>
+<script src="../lib/layer/layer.js"></script>
+<script src="../lib/My97DatePicker/WdatePicker.js"></script>
+<script src="../lib/jquery-easyui/jquery.easyui.min.js"></script>
+<script src="../lib/webuploader/webuploader.min.js"></script>
+<script src="../js/base.js?v=201810161607"></script>
+<script>
+    var query = $$.parseQueryString();
+    var displayType = query.displayType;
+    var operateType = query.operateType;
+
+    function reload() {
+        $('#dg').datagrid('reload');
+    }
+
+	function onBeforeCommit() {
+		
+	}
+	
+	function onSubmit() {
+		$$.msg('操作成功');
+		$('#dd').dialog('close');
+		reload();
+	}
+	
+	function onClickOpenDlg(target, type){
+		var row = $('#dg').datagrid('getSelected');
+		if (row === null && type != 'create') {
+            $$.msg('请选择记录！');
+            return false;
+        } 
+		$('#dd').dialog('open');
+		
+		$$.loadForm('#ff2', '/action/bm/ttf-rrsj-detail-his/view', row);
+		$$.transform('.dlg', type, {});
+	}
+	
+	function onSelectTab(title, index) {
+		var map = {
+			1: 'ttf-xfdtqh.html',
+			2: 'ttf-lsdylc.html',
+			3: 'ttf-lsdwsd.html',
+			4: 'ttf-payfd.html',
+			5: 'ttf-pazed.html',
+			6: 'ttf-lsdxte.html',
+			7: 'ttf-ttc.html'
+		};
+		
+        if (index == 0) {
+            return;
+        } else {
+			updateIframeSrc(index, $$.serializeUrl(map[index], query));
+		}
+
+        function updateIframeSrc(index, url) {
+            var panel = $('#tt').tabs('getTab', index);
+            var iframe = panel.find('iframe');
+            if (iframe.attr('src') != url) {
+                iframe.attr('src', url);
+            }
+        }
+    }
+	
+	function CalcSY(target) {
+		var val = $(target).val();
+		if(val == "") {
+			$$.msg('金额必填');
+            return false;
+		}
+		$$.loadForm('#ff2', '/action/bm/ttf-syjt/calc', {'rrsj': '1', value: val});
+	}
+	
+    $(function () {
+		$('#ff').on('keyup', function (event) {
+            if (event.keyCode == 13) {
+                $(this).find('button.btn-primary').click();
+            }
+        });
+		$('#ff').find('button.btn-primary').click();
+		$$.request('/action/bm/parameter/list', {'tzr': '1'}, function (data) {
+            $('#tzr').combobox('loadData', data.tzr);
+			$('#dtzr').combobox('loadData', data.tzr);
+        });
+    });
+</script>
+</body>
+
+</html>

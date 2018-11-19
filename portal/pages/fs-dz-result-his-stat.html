@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>对账信息查询</title>
+    <link href="../lib/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="../lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../lib/layer/theme/default/layer.css" rel="stylesheet">
+    <link rel="stylesheet" href="../lib/icheck/skins/square/blue.css">
+    <link href="../lib/jquery-easyui/themes/bootstrap/easyui.min.css" rel="stylesheet">
+
+</head>
+
+<body>
+<div class="page">
+    <form id="ff" data-options="onSerialize:serializeSearch">
+        <table class="table" style="width: 970px;">
+            <caption>查询条件</caption>
+            <tbody>
+            <tr>
+                <td class="text-right col-sm-2">
+                    <label>清算日期</label>
+                </td>
+                <td class="col-sm-4">
+                    <input id="settledate" type="text" class="Wdate" name="settledate" style="width: 120px;"
+                           onfocus="WdatePicker({onpicked:function(){$dp.$('settledate2').focus();},maxDate:'#F{$dp.$D(\'settledate2\')}'})">
+                    <input id="settledate2" type="text" class="Wdate" name="settledate2" style="width: 120px;"
+                           onfocus="WdatePicker({minDate:'#F{$dp.$D(\'settledate\')}'})">
+                </td>
+                <td class="text-right col-sm-2">
+                    <label>交易渠道</label></td>
+                <td class="col-sm-4">
+                    <div class="col-sm-12" style="padding: 0">
+                        <input id="trans_chnl" class="easyui-combobox" name="trans_chnl"
+                               data-options="multiple:true,valueField:'value',textField:'text'"/>
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="text-right col-sm-2">
+                    <label>商户号</label></td>
+                <td class="col-sm-4">
+                    <input type="text" name="mchtid" class="easyui-validatebox" data-options="">
+                </td>
+                <td class="text-right col-sm-2">
+                    <label>终端号</label></td>
+                <td class="col-sm-4">
+                    <input type="text" name="termid" class="easyui-validatebox" data-options="">
+                </td>
+            </tr>
+            <tr>
+                <td class="text-right col-sm-2">
+                    <label>非税地区码</label></td>
+                <td class="col-sm-4">
+                    <div class="col-sm-12" style="padding: 0">
+                        <input type="text" id="fscode" name="fscode" class="easyui-combobox"
+                               data-options="multiple:true,valueField:'fscode',textField:'fsname',filter:filterCombobox,formatter:formatCombobox">
+                    </div>
+                </td>
+                <td class="text-right col-sm-2">
+                    <label>执收单位</label></td>
+                <td class="col-sm-4">
+                    <div class="col-sm-12" style="padding: 0">
+                        <input type="text" id="fs_ins_id" name="fs_ins_id" class="easyui-combobox"
+                               data-options="multiple:true,valueField:'fs_inst_id',textField:'fs_inst_name',filter:filterCombobox,formatter:formatCombobox">
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="text-right col-sm-2">
+                    <label>商户名称</label></td>
+                <td class="col-sm-4">
+                    <input type="text" name="mchtname" class="easyui-validatebox" data-options="">
+                </td>
+                <td class="text-right col-sm-2">
+                    <label>卡号</label></td>
+                <td class="col-sm-4">
+                    <input type="text" name="cardno" class="easyui-validatebox" data-options="">
+                </td>
+            </tr>
+
+            <tr>
+                <td class="text-right col-sm-2">
+                    <label>POS流水号</label></td>
+                <td class="col-sm-4">
+                    <input type="text" name="termssn" class="easyui-validatebox" data-options="">
+                </td>
+                <td class="text-right col-sm-2">
+                    <label>参考号</label></td>
+                <td class="col-sm-4">
+                    <input type="text" name="refnbr" class="easyui-validatebox" data-options="">
+                </td>
+            </tr>
+
+            <tr>
+                <td class="text-right col-sm-2">
+                    <label>统计</label></td>
+                <td colspan="3" class="col-sm-10">
+                    <label>
+                        <input type="checkbox" name="stat1" data-field="trans_chnl" style="width: 22px; height: auto; opacity: 0;"> 交易渠道
+                    </label>
+                    <label>
+                        <input type="checkbox" name="stat2" data-field="fscode" style="width: 22px; height: auto; opacity: 0;"> 非税地区码
+                    </label>
+                    <label>
+                        <input type="checkbox" name="stat3" data-field="fs_ins_id" style="width: 22px; height: auto; opacity: 0;"> 执收单位
+                    </label>
+                    <label>
+                        <input type="checkbox" name="stat4" data-field="mchtid" style="width: 22px; height: auto; opacity: 0;"> 商户号
+                    </label>
+                    <label>
+                        <input type="checkbox" name="stat5" data-field="termid" style="width: 22px; height: auto; opacity: 0;"> 终端号
+                    </label>
+                </td>
+            </tr>
+
+            </tbody>
+            <tfoot>
+            <tr>
+                <td></td>
+                <td colspan="3">
+                    <button type="button" class="btn btn-primary"
+                            data-options="datagrid:'#dg',url:'/action/bm/fs-dz-result-his-stat/search'"
+                            onclick="$$.search(this)">查询
+                    </button>
+                    <button type="button" class="btn btn-default btn-outline" onclick="resetForm(this)">重置</button>
+                </td>
+            </tr>
+            </tfoot>
+        </table>
+    </form>
+    <table id="dg" class="easyui-datagrid" title="查询结果"
+           data-options="singleSelect:true,pagination:true,rownumbers:true,collapsible:true">
+        <thead>
+        <tr>
+            <th data-options="field:'settledate',width:80">清算日期</th>
+            <th data-options="field:'trans_chnl',width:100,formatter:formatTransChnl,hidden:true">交易渠道</th>
+            <th data-options="field:'fscode',width:80,hidden:true">非税地区码</th>
+            <th data-options="field:'fs_ins_id',width:100,hidden:true">执收单位</th>
+            <th data-options="field:'mchtid',width:150,hidden:true">商户号</th>
+            <th data-options="field:'termid',width:80,hidden:true">终端号</th>
+            <th data-options="field:'trans_count',width:80">交易笔数</th>
+            <th data-options="field:'amount',width:120,formatter:formatAmount">交易金额</th>
+            <th data-options="field:'trans_fee',width:80">交易手续费</th>
+        </tr>
+        </thead>
+    </table>
+</div>
+
+<script src="../lib/jquery/jquery.min.js"></script>
+<script src="../lib/layer/layer.js"></script>
+<script src="../lib/icheck/icheck.min.js"></script>
+<script src="../lib/My97DatePicker/WdatePicker.js"></script>
+<script src="../lib/jquery-easyui/jquery.easyui.min.js"></script>
+<script src="../js/base.js"></script>
+<script src="../js/st.js"></script>
+<script src="../js/param.js"></script>
+<script src="../js/district.js"></script>
+<script>
+    $('input').iCheck({
+        checkboxClass: 'icheckbox_square-blue',
+        radioClass: 'iradio_square-blue'
+    });
+
+    var query = $$.parseQueryString();
+    var displayType = query.displayType;
+    var operateType = query.operateType;
+
+    var params = {
+        trans_chnl: [{
+            value: "0",
+            text: "互联网"
+        }, {
+            value: "1",
+            text: "POS"
+        }, {
+            value: "2",
+            text: "移动互联网"
+        }, {
+            value: "3",
+            text: "POS通"
+        }
+        ],
+        review_status: [{
+            value: "0",
+            text: "未提交"
+        }, {
+            value: "2",
+            text: "审核通过"
+        }, {
+            value: "3",
+            text: "退回"
+        }
+        ],
+        flag: [{
+            value: "1",
+            text: "2.0版本"
+        }, {
+            value: "2",
+            text: "1.0版本"
+        }
+        ],
+        mchtstate: [{
+            value: "1",
+            text: "启用"
+        }, {
+            value: "2",
+            text: "关闭"
+        }
+        ]
+    }
+
+
+    function resetForm(target) {
+        $$.reset.call(target);
+        $('input').iCheck('uncheck');
+        $('#trans_chnl').combobox('setValues', []);
+        $('#fscode').combobox('setValues', []);
+        $('#fs_ins_id').combobox('setValues', []);
+    }
+
+    function formatCombobox(row) {
+        var opts = $(this).combobox('options');
+        return row[opts.valueField] + '-' + row[opts.textField];
+    }
+
+
+    function filterCombobox(q, row) {
+        var opts = $(this).combobox('options');
+        return row[opts.valueField].indexOf(q) >= 0 || row[opts.textField].indexOf(q) >= 0;
+    }
+
+
+    function serializeSearch(data) {
+
+    }
+
+    function onClickRow(rowIndex, rowData) {
+
+    }
+
+    function formatAmount(value) {
+        return value / 100;
+    }
+
+    function onChangeCity() {
+        var value = $(this).val();
+        $$.request('/action/bm/parameter/list', {
+            city: value,
+            district: '1'
+        }, function (data) {
+            $$.loadSelect('#areacode', data.district);
+        });
+    }
+
+    function onChangeDistrict() {
+        var value = $(this).val();
+        $('#fscode').val(value);
+    }
+
+    function formatTransChnl(value) {
+        return $$.formatField(params['trans_chnl'], value);
+    }
+
+    function formatReview(value) {
+        return $$.formatField(params['review_status'], value);
+    }
+
+    function formatFlag(value) {
+        return $$.formatField(params['flag'], value);
+    }
+
+    function formatMchtState(value) {
+        return $$.formatField(params['mchtstate'], value);
+    }
+
+    function formatOp(value, row) {
+//        return '<a href="fs-dz-result-detail.html" class="btn btn-white btn-sm" data-toggle="view"><i class="fa fa-folder"></i> 查看 </a>';
+    }
+
+    $(function () {
+        $('input').on('ifChecked', function (event) {
+            var field = $(this).attr('data-field');
+            if(field) {
+                $('#dg').datagrid('showColumn', field);
+            }
+        }).on('ifUnchecked', function (event) {
+            var field = $(this).attr('data-field');
+            if(field) {
+                $('#dg').datagrid('hideColumn', field);
+            }
+        });
+
+        $('#trans_chnl').combobox('loadData', params.trans_chnl);
+
+        $$.request('/action/bm/d-fscode/list', {}, function (data) {
+            $('#fscode').combobox('loadData', data.rows);
+        });
+
+        $$.request('/action/bm/d-fs-inst/list', {}, function (data) {
+            $('#fs_ins_id').combobox('loadData', data.rows);
+        });
+
+    });
+</script>
+</body>
+
+</html>

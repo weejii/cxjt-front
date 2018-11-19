@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>营销联盟</title>
+    <link href="../lib/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="../lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../lib/layer/theme/default/layer.css" rel="stylesheet">
+    <link href="../lib/viewer/viewer.min.css" rel="stylesheet">
+    <link href="../lib/jquery-easyui/themes/bootstrap/easyui.min.css" rel="stylesheet">
+</head>
+
+<body>
+	<div class="page">
+		<form id="ff" data-options="onSerialize:$.noop">
+			<table class="table" style="width: 970px;">
+				<caption>查询营销联盟</caption>
+				<tr>
+					<td class="text-right col-sm-2">
+						<label>城市：</label>
+					</td>
+					<td class="col-sm-4">
+						<div class="col-sm-12" style="padding:0;">
+							<input type="text" id="dq" name="dq" class="easyui-combobox">
+						</div>
+					</td>
+					<td class="text-right col-sm-2">
+						<label>活动银行：</label>
+					</td>
+					<td class="col-sm-4">
+						<div class="col-sm-12" style="padding:0;">
+							<input type="text" id="bank" name="bank" class="easyui-combobox">
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td class="text-right col-sm-2">
+						<label>来款日期：</label>
+					</td>
+					<td class="col-sm-4">
+						<input id="lkrq1" type="text" class="Wdate" name="lkrq" style="width: 120px;" onfocus="WdatePicker({onpicked:function(){$dp.$('#lkrq2').focus();},maxDate:'#F{$dp.$D(\'lkrq2\')}',dateFmt:'yyyyMMdd'})">
+						<input id="lkrq2" type="text" class="Wdate" name="lkrq2" style="width: 120px;" onfocus="WdatePicker({minDate:'#F{$dp.$D(\'lkrq1\')}',dateFmt:'yyyyMMdd'})">
+					</td>
+				</tr>
+				<tfoot>
+				<tr>
+					<td></td>
+					<td align="right">
+						<button type="button" class="btn btn-primary"
+								data-options="datagrid:'#dg',url:'/action/bm/yxlm-xxy/search'"
+								onclick="$$.search(this)">查询
+						</button>
+					</td>
+					<td align="left">
+						<button type="button" class="btn btn-default btn-outline" onclick="$$.reset(this)">重置</button>
+					</td>
+					<td></td>
+				</tr>
+				</tfoot>
+			</table>
+		</form>
+
+		<div id="tb">
+			<a href="#" class="easyui-linkbutton" onclick="onClickOpenDlg(this, 'view')" data-options="iconCls:'fa fa-bars',plain:true">查看详情</a>
+			<a href="#" class="easyui-linkbutton" onclick="onClickOpenDlg(this, 'create')" data-options="iconCls:'fa fa-bars',plain:true">新增</a>
+			<a href="#" class="easyui-linkbutton" onclick="onClickOpenDlg(this, 'update')" data-options="iconCls:'fa fa-bars',plain:true">编辑</a>
+		</div>
+		<table id="dg" class="easyui-datagrid" title="查询记录" data-options="singleSelect:true,pagination:true,rownumbers:true,toolbar:'#tb',idField:'rec_id'">
+			<thead>
+			<tr>
+				<th data-options="field:'kprq'">开票日期</th>
+				<th data-options="field:'lkrq'">来款日期</th>
+				<th data-options="field:'lkje'">来款金额</th>
+				<th data-options="field:'sffmc'">收/付方名称</th>
+				<th data-options="field:'dq'">地市</th>
+				<th data-options="field:'bank'">银行</th>
+				<th data-options="field:'zjc'">资金池</th>
+				<th data-options="field:'csr'">纯收入</th>
+				<th data-options="field:'ss'">税收</th>
+				<th data-options="field:'qt'">其他</th>
+				<th data-options="field:'hkje'">划款金额</th>
+				<th data-options="field:'zjcbm'">资金池编码</th>
+				<th data-options="field:'pjh'">票据号</th>
+			</tr>
+			</thead>
+		</table>
+	</div>
+
+	<div id="dd" class="easyui-dialog dlg" title="修改参数" style="width:860px;height:460px;" data-options="resizable:true,modal:true,closed:true">
+		<form id="ff2" data-options="onSerialize:$.noop">
+			<table class="table" style="width: 800px;">
+				<tbody>
+					<tr>
+						<input type="text" class="hidden" name="rec_id">
+					</tr>
+					<tr class="tf tf-create tf-update">
+						<td class="text-right col-sm-2">
+							<label>开票日期</label></td>
+						<td class="col-sm-4">
+							<input id="kprq" type="text" class="Wdate" name="kprq" style="width: 120px;" onfocus="WdatePicker({dateFmt:'yyyyMMdd'})">
+						</td>
+						<td class="text-right col-sm-2">
+							<label>来款日期</label></td>
+						<td class="col-sm-4">
+							<input id="lkrq" type="text" class="Wdate" name="lkrq" style="width: 120px;" onfocus="WdatePicker({dateFmt:'yyyyMMdd'})">
+						</td>
+					</tr>
+					<tr class="tf tf-create tf-update">
+						<td class="text-right col-sm-2">
+							<label>地市</label></td>
+						<td class="col-sm-4">
+							<div class="col-sm-12" style="padding:0;">
+								<input type="text" id="ddq" name="dq" class="easyui-combobox">
+							</div>
+						</td>
+						<td class="text-right col-sm-2">
+							<label>活动银行</label></td>
+						<td class="col-sm-4">
+							<div class="col-sm-12" style="padding:0;">
+								<input type="text" id="dbank" name="bank" class="easyui-combobox">
+							</div>
+						</td>
+					</tr>
+					<tr class="tf tf-create tf-update">
+						<td class="text-right col-sm-2">
+							<label>来款金额</label></td>
+						<td class="col-sm-4">
+							<input type="text" name="lkje">
+						</td>
+						<td class="text-right col-sm-2">
+							<label>收/付方名称</label></td>
+						<td class="col-sm-4">
+							<input type="text" name="sffmc">
+						</td>
+					</tr>
+					<tr class="tf tf-create tf-update">
+						<td class="text-right col-sm-2">
+							<label>资金池</label></td>
+						<td class="col-sm-4">
+							<input type="number" name="zjc">
+						</td>
+						<td class="text-right col-sm-2">
+							<label>收/付方开户行名</label></td>
+						<td class="col-sm-4">
+							<input type="text" name="sffkhhm">
+						</td>
+					</tr>
+					<tr class="tf tf-create tf-update">
+						<td class="text-right col-sm-2">
+							<label>纯收入</label></td>
+						<td class="col-sm-4">
+							<input type="number" name="csr">
+						</td>
+						<td class="text-right col-sm-2">
+							<label>税收</label></td>
+						<td class="col-sm-4">
+							<input type="number" name="ss">
+						</td>
+					</tr>
+					<tr class="tf tf-create tf-update">
+						<td class="text-right col-sm-2">
+							<label>其他</label></td>
+						<td class="col-sm-4">
+							<input type="number" name="qt">
+						</td>
+						<td class="text-right col-sm-2">
+							<label>划款金额</label></td>
+						<td class="col-sm-4">
+							<input type="number" name="hkje">
+						</td>
+					</tr>
+					<tr>
+						<td class="text-right col-sm-2">
+							<label>资金池编码</label></td>
+						<td class="col-sm-4">
+							<input type="text" name="zjcbm">
+						</td>
+						<td class="text-right col-sm-2">
+							<label>票据号</label></td>
+						<td class="col-sm-4 tf tf-create tf-update">
+							<input type="text" name="pjh">
+						</td>
+					</tr>
+					<tr class="tf">
+						<td class="text-right col-sm-2">
+							<label>录入人</label></td>
+						<td class="col-sm-4 tf">
+							<input type="text" name="lrr" class="easyui-validatebox" data-options="">
+						</td>
+						<td class="text-right col-sm-2">
+							<label>录入时间</label></td>
+						<td class="col-sm-4">
+							<input type="text" name="lrsj" class="easyui-validatebox" data-options="">
+						</td>
+					</tr>
+				</tbody>
+
+				<tfoot>
+				<tr>
+					<td></td>
+					<td></td>
+					<td>
+						<button type="button" class="btn btn-primary tf tf-create" onclick="$$.submit(this)"
+								data-options="url:'/action/bm/yxlm-xxy/create',onSuccess:onSubmit">
+							新增提交
+						</button>
+						<button type="button" class="btn btn-primary tf tf-update" onclick="$$.submit(this)"
+								data-options="url:'/action/bm/yxlm-xxy/update',onSuccess:onSubmit">
+							编辑提交
+						</button>
+					</td>
+				</tr>
+				</tfoot>
+			</table>
+		</form>
+	</div>
+
+<script src="../lib/jquery/jquery.min.js"></script>
+<script src="../lib/layer/layer.js"></script>
+<script src="../lib/My97DatePicker/WdatePicker.js"></script>
+<script src="../lib/jquery-easyui/jquery.easyui.min.js"></script>
+<script src="../lib/webuploader/webuploader.min.js"></script>
+<script src="../js/base.js?v=201810161607"></script>
+<script>
+    var query = $$.parseQueryString();
+    var displayType = query.displayType;
+    var operateType = query.operateType;
+
+    function reload() {
+        $('#dg').datagrid('reload');
+    }
+
+	function onSubmit() {
+		$$.msg('操作成功');
+		$('#dd').dialog('close');
+		reload();
+	}
+	
+	function onClickOpenDlg(target, type){
+		var row = $('#dg').datagrid('getSelected');
+		if (row === null && type != 'create') {
+            $$.msg('请选择记录！');
+            return false;
+        } 
+		$('#dd').dialog('open');
+		
+		$$.loadForm('#ff2', '/action/bm/yxlm-xxy/view', row);
+		$$.transform('.dlg', type, {});
+	}
+	
+    $(function () {
+		$('#ff').on('keyup', function (event) {
+            if (event.keyCode == 13) {
+                $(this).find('button.btn-primary').click();
+            }
+        });
+		$('#ff').find('button.btn-primary').click();
+		$$.request('/action/bm/parameter/list', {'bank': '1'}, function (data) {
+            $('#bank').combobox('loadData', data.bank);
+			$('#dbank').combobox('loadData', data.bank);
+        });
+		
+		$$.request('/action/bm/parameter/list', {'dq': '1'}, function (data) {
+            $('#dq').combobox('loadData', data.dq);
+			$('#ddq').combobox('loadData', data.dq);
+        });
+    });
+</script>
+</body>
+
+</html>

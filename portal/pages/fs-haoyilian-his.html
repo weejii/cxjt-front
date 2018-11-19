@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>非税好易联交易明细</title>
+    <link href="../lib/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="../lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <link href="../lib/layer/theme/default/layer.css" rel="stylesheet">
+    <link href="../lib/jquery-easyui/themes/bootstrap/easyui.min.css" rel="stylesheet">
+
+</head>
+
+<body>
+<div class="page">
+    <form id="ff" data-options="onSerialize:$.noop">
+        <table class="table" style="width: 970px;">
+            <caption>查询非税好易联交易明细</caption>
+            <tbody>
+            <tr>
+            	<td class="text-right col-sm-2">
+					<label>商户号：</label>
+				</td>
+				<td class="col-sm-4">
+					<input type="text" name="shh">
+				</td>
+				<td class="text-right col-sm-2">
+					<label>交易日期：</label>
+				</td>
+				<td class="col-sm-4">
+					<input id="qsrq" type="text" class="Wdate" name="qsrq" style="width: 120px;" onfocus="WdatePicker({onpicked:function(){$dp.$('#qsrq2').focus();},maxDate:'#F{$dp.$D(\'qsrq2\')}',dateFmt:'yyyyMMdd'})">
+					<input id="qsrq2" type="text" class="Wdate" name="qsrq2" style="width: 120px;" onfocus="WdatePicker({minDate:'#F{$dp.$D(\'qsrq\')}',dateFmt:'yyyyMMdd'})">
+				</td>
+			</tr>
+            </tbody>
+
+            <tfoot>
+            <tr>
+                <td></td>
+                <td></td>
+                <td colspan="3">
+                    <button type="button" class="btn btn-primary" onclick="$$.search(this)"
+                            data-options="datagrid:'#dg',url:'/action/bm/fs-haoyilian-his/search'">
+                        查询
+                    </button>
+                    <button type="button" class="btn btn-default btn-outline" onclick="$$.reset(this)">重置</button>
+                    <button type="button" class="btn btn-success" onclick="$$.exportData(this)"
+                            data-options="datagrid:'#dg',url:'/action/bm/fs-haoyilian-his/export'">
+                        导出
+                    </button>
+                </td>
+            </tr>
+            </tfoot>
+        </table>
+    </form>
+    <table id="dg" class="easyui-datagrid" title="查询结果"
+           data-options="singleSelect:true,pagination:true,rownumbers:true,toolbar:'#tb'">
+        <thead>
+        <tr>
+            <!--th data-options="field:'chk',checkbox:true"></th-->
+            <th data-options="field:'jyrq'">交易日期</th>
+            <th data-options="field:'jysj'">交易时间</th>
+            <th data-options="field:'shh'">商户号</th>
+			<th data-options="field:'ywmc'">业务名称</th>
+            <th data-options="field:'jylx'">交易类型</th>
+			<th data-options="field:'lsh'">流水号</th>
+       		<th data-options="field:'xtckh'">系统参考号</th>
+       		<th data-options="field:'kh'">卡号</th>
+			<th data-options="field:'jyje'">交易金额</th>
+			<th data-options="field:'xtgzh'">系统跟踪号</th>
+        </tr>
+        </thead>
+    </table>
+</div>
+<script src="../lib/jquery/jquery.min.js"></script>
+<script src="../lib/layer/layer.js"></script>
+<script src="../lib/My97DatePicker/WdatePicker.js"></script>
+<script src="../lib/jquery-easyui/jquery.easyui.min.js"></script>
+<script src="../js/base.js"></script>
+<script src="../js/st.js"></script>
+<script src="../js/param.js"></script>
+<script src="../js/district.js"></script>
+<script>
+    var query = $$.parseQueryString();
+    var displayType = query.displayType;
+    var operateType = query.operateType;
+
+    function reload() {
+        $('#dg').datagrid('reload');
+    }
+
+	
+    $(function () {
+        $('form').on('keyup', function (event) {
+            if (event.keyCode == 13) {
+                $(this).find('button.btn-primary').click();
+            }
+        });
+		
+        $('#ff').find('button.btn-primary').click();
+    });
+</script>
+</body>
+
+</html>
